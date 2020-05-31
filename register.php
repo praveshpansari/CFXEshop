@@ -35,13 +35,7 @@ if (isset($_POST['first_name']) && isset($_POST['username']) && isset($_POST['ag
                                 $phone = $_POST['phone'];
                                 $default = 'DEFAULT';
                                 $vkey = md5(time() . $username);
-                                $query = oci_parse($conn, "INSERT INTO USERS(USER_ID, PASSWORD, EMAIL, PHONE_NO,VKEY,TYPE, STATUS) VALUES ({$default},'{$registerPassword}','{$registerEmail}','{$phone}','{$vkey}','C',{$default})");
-                                oci_execute($query);
-                                $query = oci_parse($conn, "SELECT USER_ID FROM USERS WHERE EMAIL = '${registerEmail}'");
-                                oci_execute($query);
-                                $result = oci_fetch_assoc($query);
-                                $userId = $result['USER_ID'];
-                                $query = oci_parse($conn, "INSERT INTO CUSTOMER(CUSTOMER_ID, USERNAME, FIRST_NAME, LAST_NAME, AGE) VALUES ('${userId}','{$username}','{$firstname}','{$lastname}','{$age}')");
+                                $query = oci_parse($conn, "BEGIN REGISTER_CUSTOMER('{$registerPassword}','{$registerEmail}','{$phone}','{$vkey}','C','{$username}','{$firstname}','{$lastname}','{$age}'); END;");
                                 oci_execute($query);
                                 $to = $registerEmail;
                                 $subject = "Email Verification - CFX eShop";

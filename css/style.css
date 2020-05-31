@@ -2938,7 +2938,7 @@ fieldset:disabled a.btn {
   line-height: 1.5;
   border-radius: 0 !important;
   background-color: #fff;
-  border:0;
+  border: 0;
   cursor: pointer;
 }
 
@@ -2947,9 +2947,10 @@ fieldset:disabled a.btn {
   background-color: #DDD;
 }
 
-.btn-accord:active,.btn-accord:focus{
+.btn-accord:active,
+.btn-accord:focus {
   transition: ease 0.2s;
-  outline:none;
+  outline: none;
   color: #fff;
   background-color: #212529;
 }

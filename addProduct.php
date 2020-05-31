@@ -12,7 +12,7 @@ if (isset($_GET['pname']) && isset($_GET['price']) && $_GET['description'] != NU
         $query1 = oci_parse($conn, "SELECT SHOP_ID FROM SHOP_PRODUCT WHERE PRODUCT_ID = '${pid}'");
         oci_execute($query1);
         $flag = oci_fetch_assoc($query1)['SHOP_ID'] == $pshop;
-        if($flag) break;
+        if ($flag) break;
     }
 
     if (!$flag) {
@@ -23,7 +23,7 @@ if (isset($_GET['pname']) && isset($_GET['price']) && $_GET['description'] != NU
         $stock = $_GET['stock'];
         $pimg = $_GET['pimg'];
         $quantity = $_GET['quantity'];
-        
+
         if (isset($_GET['allergy'])) {
             $allergy = $_GET['allergy'];
         } else {
@@ -38,3 +38,5 @@ if (isset($_GET['pname']) && isset($_GET['price']) && $_GET['description'] != NU
 } else {
     echo "all";
 }
+?>
+

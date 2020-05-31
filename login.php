@@ -11,7 +11,7 @@ if (isset($_POST['emailId']) && isset($_POST['password'])) {
             if ($result['STATUS'] == 'Y') {
                 $userId = $result['USER_ID'];
                 if ($result['TYPE'] == 'C') {
-                    $query = oci_parse($conn, "SELECT * FROM CUSTOMER WHERE CUSTOMER_ID = '${userId}'");
+                    $query = oci_parse($conn, "SELECT * FROM CUSTOMER_INFO WHERE CUSTOMER_ID = '${userId}'");
                     oci_execute($query);
                     $result2 = oci_fetch_assoc($query);
                     session_start();
@@ -22,6 +22,7 @@ if (isset($_POST['emailId']) && isset($_POST['password'])) {
                     $_SESSION['add2'] = $result['ADDRESS_2'];
                     $_SESSION['phone'] = $result['PHONE_NO'];
                     $_SESSION['age'] = $result2['AGE'];
+                    $_SESSION['cartId'] = $result2['CART_ID'];
                     $_SESSION['id'] = $userId;
                     $_SESSION['pic'] = $result2['PROFILE_PIC'];
                     $_SESSION['sex'] = $result2['SEX'];

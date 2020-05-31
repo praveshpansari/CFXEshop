@@ -599,7 +599,7 @@ $(document).ready(function () {
 		$('#cropProduct').click(function (event) {
 			$product_img.croppie('result', {
 				type: 'canvas',
-				size: { width: 1000, height: 800 },
+				size: 'viewport',
 			}).then(function (response) {
 				$.ajax({
 					url: "upload.php",
@@ -681,16 +681,158 @@ $(document).ready(function () {
 		load_data(page);
 	});
 
+	$(document).on('click', '.buy-now', function () {
+		var pid = $(this).attr('id');
+		var min = $('#min-quantity').val();
+		var now = $(this);
+		$.ajax({
+			url: 'cart.php',
+			method: 'get',
+			data: { add: 1, pid: pid, min: min },
+			success: function (data) {
+				if (data != "not") {
+					window.location = 'cart.php';
+				}
+			}
+		});
+	});
 });
 
-$('.page-link-bs').click(function() {
-	var page = $(this).html();
-	
-	if(page)
+$(document).on('click', '.product-remove', function () {
+	var pid = $(this).attr('id');
+	$.ajax({
+		url: 'remove-cart.php',
+		method: 'get',
+		data: { pid: pid, rem: 1 },
+		success: function (data) {
+			if (data == 'done')
+				$(".ftco-cart").load(window.location.href + " .ftco-cart");
+		}
+	})
+});
 
+
+
+$(document).ready(function () {
+
+	load_data(1);
+
+	function load_data(page, sort) {
+		$.ajax({
+			url: 'edit-product.php',
+			method: 'GET',
+			data: { view: 1, page: page, sort: sort },
+			success: function (data) {
+				if (data == 'no') {
+					$('#manageProductPara').html("NO PRODUCT FOUNDS");
+				} else {
+					$('#manageProductPara').html(data);
+				}
+			}
+		});
+	}
+
+	$(document).on('click', '.page-link-bs', function () {
+		var page = $(this).attr('id');
+		if ($(this).hasClass('prev'))
+			page--;
+
+		else if ($(this).hasClass('next'))
+			page++;
+
+		load_data(page);
+	});
+
+	var order = "aesc";
+	$(document).on('click', '#sort-price', function () {
+		var page = $('.pagination-bs').attr('id');
+		if (order == "aesc") {
+			load_data(page, "PRICE ASC");
+			order = "desc";
+		} else if (order == "desc") {
+			load_data(page, "PRICE DESC");
+			order = "aesc";
+		}
+	});
+
+	function edit_product(pid) {
+		var page = $('.pagination-bs').attr('id');
+		$.ajax({
+			url: 'edit-product.php',
+			method: 'GET',
+			data: { edit: 1, pid: pid, page: page },
+			success: function (data) {
+				if (data == 'no') {
+					$('#manageProductPara').html("NO PRODUCT FOUNDS");
+				} else {
+					$('#manageProductPara').html(data);
+				}
+			}
+		});
+	}
+
+	$(document).on('click', '.edit-product', function () {
+		var pid = $(this).attr('id');
+		edit_product(pid);
+	})
+
+	$(document).on('submit', '#editProduct', function (e) {
+		e.preventDefault();
+
+		var pid = $('#pid').val();
+		var pname = $('#product-name-edit').val();
+		var price = parseFloat($('#product-price-edit').val())
+		var quantity = parseInt($('#quanPerItem-edit').val()) + ' ' + $('#unit-edit').val();
+		var allergy = $('#allergy-edit').val();
+		var min = parseInt($('#min-order-edit').val());
+		var max = parseInt($('#max-order-edit').val());
+		var stock = parseInt($('#stock-amount-edit').val());
+		var description = $('textarea#description-edit').val();
+		var pimg = $('.product-pic-edit').attr('src');
+
+		$.ajax({
+			url: 'edit-Product.php',
+			method: 'GET',
+			data: { pid: pid, pname: pname, price: price, quantity: quantity, allergy: allergy, min: min, max: max, stock: stock, description: description, pimg: pimg },
+			success: function (response) {
+				if (response == "okay") {
+					$('#errorInfo-edit').html('<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>');
+					$('#wrong_email').toast('show');
+				}
+			}
+		});
+	});
+
+	$(document).on('click', '.backBtn', function () {
+		var page = $('.withPage').attr('id');
+		load_data(page);
+	});
+
+	$(document).on('click', '#deleteBtn', function () {
+		var pid = $('#pid').val();
+		var page = $('.withPage').attr('id');
+		var pimg = $('.product-pic-edit').attr('src');
+		$.ajax({
+			url: 'edit-product.php',
+			method: 'GET',
+			data: { delete: 1, pid: pid, pimg: pimg },
+			success: function (response) {
+				if (response == "deleted") {
+					load_data(page);
+					$('#errorInfo-edit').html('<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>');
+					$('#wrong_email').toast('show');
+				}
+			}
+		});
+
+
+	});
 
 
 });
+
+
+
 
 
 $(document).ready(function () {

@@ -424,68 +424,9 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Manage Your Products</h5>
-                            <p class="card-text">
-                                <h6 class="mt-5 mb-4">Your Products</h6>
+                            <p class="card-text" id="manageProductPara">
 
-                                <?php
-                                $id = $_SESSION['id'];
-                                $query = oci_parse($conn, "SELECT count(*) NUM FROM SUPPLIER_PRODUCTS WHERE SUPPLIER_ID = '${id}'");
-                                oci_execute($query);
-                                if (oci_fetch_assoc($query)['NUM'] > 0) {
-                                    $query = oci_parse($conn, "SELECT * FROM SUPPLIER_PRODUCTS WHERE SUPPLIER_ID = '${id}'");
-                                    oci_execute($query);
-                                    $items = 12;
 
-                                    isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
-
-                                    if ($page > 1) {
-                                        $start = ($page * $items) - $items + 1;
-                                        $upper = $start + $items - 1;
-                                    } else {
-                                        $start = 1;
-                                        $upper = $items;
-                                    }
-
-                                ?>
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination-bs justify-content-end">
-                                            <li class="page-item-bs"><a class="page-link-bs">Previous</a></li>
-                                            <li class="page-item-bs"><a class="page-link-bs">1</a></li>
-                                            <li class="page-item-bs"><a class="page-link-bs">2</a></li>
-                                            <li class="page-item-bs"><a class="page-link-bs">3</a></li>
-                                            <li class="page-item-bs"><a class="page-link-bs">Next</a></li>
-                                        </ul>
-                                    </nav>
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead class="thead-dark">
-                                                <tr>
-                                                    <th scope="col" style="width: 21%">Product Image</th>
-                                                    <th scope="col">Product Name</th>
-                                                    <th scope="col">Price</th>
-                                                    <th scope="col">Stock Remaining</th>
-                                                    <th scope="col">Shop</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php while ($result = oci_fetch_assoc($query)) { ?>
-                                                    <tr>
-                                                        <td style="padding-top:5px;padding-bottom:5px"><img class="img-fluid" src="<?= $result['PRODUCT_IMAGE'] ?>"></td>
-                                                        <td><?= $result['PRODUCT_NAME'] ?></td>
-                                                        <td><?= $result['PRICE'] ?></td>
-                                                        <td><?= $result['STOCK_AMOUNT'] ?></td>
-                                                        <td><?= $result['SHOP_NAME'] ?></td>
-                                                    </tr>
-                                                <?php } ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                <?php
-                                } else {
-                                    echo "No PRODUCTS FOUND";
-                                }
-
-                                ?>
                             </p>
                         </div>
                     </div>
