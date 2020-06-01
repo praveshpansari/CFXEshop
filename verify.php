@@ -14,6 +14,8 @@ if (isset($_GET['vkey'])) {
     } else {
         echo "This account is invalid or has been already verified";
     }
+} else if (isset($_GET['add1']) && isset($_GET['payment'])) {
+    
 } else {
     die('Something went wrong!');
 }

@@ -188,11 +188,20 @@ if (isset($_SESSION['loggedin'])) {
 									<hr>
 									<p class="d-flex total-price">
 										<span>Total</span>
-										<span class="total-price" id="<?= $result['NET_AMOUNT'] ?>">$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
+										<span>$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
 									</p>
 								</div>
-								<!-- <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p> -->
-								<div id="paypal-button-container"></div>
+
+
+								<div class="input-group date" data-provide="datepicker">
+									<input type="text" class="form-control">
+									<div class="input-group-addon">
+										<span class="glyphicon glyphicon-th"></span>
+									</div>
+								</div>
+
+								<p><a href="checkout.php" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+								
 
 
 							</div>
@@ -303,8 +312,7 @@ if (isset($_SESSION['loggedin'])) {
 					<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
 					<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
-			<script src="https://www.paypal.com/sdk/js?client-id=ATzZLdq_nMR3SCYKscJAPQGqasL4TQi6p0i_nQjb-eeWCumq1_kyC3lhkDKozdaxDpZTUCXrh7oXa6TV&currency=GBP">
-				// Required. Replace SB_CLIENT_ID with your sandbox client ID.
+			
 			</script>
 			<script src="js/jquery.min.js"></script>
 			<script src="js/jquery-migrate-3.0.1.min.js"></script>
@@ -324,56 +332,7 @@ if (isset($_SESSION['loggedin'])) {
 			<script src="js/main.js"></script>
 
 
-			<script>
-				$('.cart-total').click(function() {
-					sendReceipt();
-				});
-
-				var total = parseFloat($('span.total-price').attr('id'));
-
-				function sendReceipt() {
-					var payment = "done";
-					$.ajax({
-						url: 'reciept.php',
-						method: 'post',
-						data: {
-							payment: payment,
-						},
-						success: function(data) {
-							if (data == 'OK')
-								alert('maile you recipt');
-							else
-								alert('not done');
-						}
-					});
-				}
-
-				paypal.Buttons({
-					style: {
-						shape: 'rect',
-						color: 'black',
-						layout: 'horizontal',
-						label: 'checkout',
-
-					},
-					createOrder: function(data, actions) {
-						return actions.order.create({
-							purchase_units: [{
-								amount: {
-									value: total
-								}
-							}]
-						});
-					},
-					onApprove: function(data, actions) {
-						return actions.order.capture().then(function(details) {
-							sendReceipt();
-							alert('Transaction completed by ' + details.payer.name.given_name + '!');
-						});
-					}
-				}).render('#paypal-button-container');
-			</script>
-
+			
 		</body>
 
 		</html>

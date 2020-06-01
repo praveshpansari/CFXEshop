@@ -13315,18 +13315,23 @@ h5,
 }
 
 .billing-form .form-control {
-  font-weight: 300;
+  font-weight: 600;
   border: transparent !important;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
   height: 58px !important;
   padding-left: 15px;
   padding-right: 15px;
   background: transparent !important;
-  color: rgba(0, 0, 0, 0.4) !important;
+  color: rgba(0, 0, 0, 0.9) !important;
   font-size: 14px;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
+}
+
+.billing-form .form-control:disabled {
+  cursor: default;
+  color: #666 !important;
 }
 
 .billing-form .form-control::-webkit-input-placeholder {

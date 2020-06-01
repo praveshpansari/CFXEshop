@@ -1,21 +1,12 @@
 <?php
 include 'connection.php';
-
-if (!isset($_GET['product'])) {
-	die(header('location:shop.php'));
-}
-
-$id = $_GET['product'];
-$query = oci_parse($conn, "SELECT * FROM PRODUCT NATURAL JOIN SHOP_PRODUCT WHERE PRODUCT_ID = '${id}'");
-oci_execute($query);
-$result = oci_fetch_assoc($query);
+session_start();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
+	<title>CFX eShop</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -99,8 +90,9 @@ $result = oci_fetch_assoc($query);
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a href="index.html">Product</a></span> <span>Product Single</span></p>
-					<h1 class="mb-0 bread">Product Single</h1>
+					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Checkout</span>
+					</p>
+					<h1 class="mb-0 bread">Checkout</h1>
 				</div>
 			</div>
 		</div>
@@ -108,198 +100,126 @@ $result = oci_fetch_assoc($query);
 
 	<section class="ftco-section">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 mb-5 ftco-animate">
-					<a href="#" class="image-popup"><img src="<?= $result['PRODUCT_IMAGE'] ?>" class="img-fluid" style="width:100%"></a>
-				</div>
-				<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-					<h3><?= $result['PRODUCT_NAME'] ?></h3>
-					<div class="rating d-flex">
-						<p class="text-left mr-4">
-							<a href="#" class="mr-2">5.0</a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-							<a href="#"><span class="ion-ios-star-outline"></span></a>
-						</p>
-						<p class="text-left mr-4">
-							<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Ratings</span></a>
-						</p>
-					</div>
-					<p class="price"><span>$<?= $result['PRICE'] ?></span></p>
-					<p><?= $result['DESCRIPTION'] ?>
-					</p>
-					<div class="row mt-4">
-						<div class="w-100"></div>
-						<div class="input-group col-md-6 d-flex mb-3">
-							<span class="input-group-btn mr-2">
-								<button type="button" class="quantity-left-minus btn btn-number" data-type="minus" data-field="quantity">
-									<i class="ion-ios-remove"></i>
-								</button>
-							</span>
-							<input type="text" id="quantity" name="quantity" class="form-control input-number" value="<?= $result['MIN_ORDER'] ?>" min="<?= $result['MIN_ORDER'] ?>" max="<?= $result['MAX_ORDER'] ?>">
-							<span class="input-group-btn ml-2">
-								<button type="button" class="quantity-right-plus btn btn-number" data-type="plus" data-field="quantity">
-									<i class="ion-ios-add"></i>
-								</button>
-							</span>
-							
-						</div>
-						<div class="w-100"></div>
-						
-						<div class="col-md-12">
-						<h6>Quantity per Item: <?= $result['QUANTITY'] ?></h6>
-							<p style="color: #000;">
-								<?php
-								$stock =  (int) filter_var($result['QUANTITY'], FILTER_SANITIZE_NUMBER_INT) * $result['STOCK_AMOUNT'];
-								$unit = explode(' ', $result['QUANTITY']);
+			<form action="#" id="formBill" class="billing-form">
+				<div class="row justify-content-center">
+					<div class="col-xl-7 ftco-animate">
 
-								if (strpos($unit[1], 'grams') !== false)
-									echo (($stock < 1000) ? $stock : $stock / 1000) . " kilo" . $unit[1];
-									else if(strpos($unit[1], 'ml') !== false)
-									echo (($stock < 1000) ? $stock : $stock / 1000) . " litres";
-								else if (strpos($unit[1], 'slices') !== false || strpos($unit[1], 'pieces') !== false)
-									echo $stock . " " . $unit[1];
-								else
-									echo $stock . " " . $unit[1] . "s";
-								?> available</p>
-						</div>
-					</div>
-					<p><a href="http://localhost:8080/apex/r/cfxeshop/100/sample-database-application?session=7343085727868" class="btn btn-black py-3 px-5">Add to Cart</a></p>
-				</div>
-			</div>
-		</div>
-	</section>
+						<h3 class="mb-4 billing-heading">Billing Details</h3>
+						<div class="row align-items-end">
+							<div class="w-100"></div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="inputAddress">Address</label>
+									<input type="text" class="form-control validate" id="inputAddress" name="add1" value="<?php echo $_SESSION["add1"]; ?>" placeholder="1234 Main St" required>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<input type="text" class="form-control" id="inputAddress2" value="<?php echo $_SESSION["add2"]; ?>" placeholder="Apartment, studio, or floor(Optional)">
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="phone">Phone Number</label>
+									<input id="phone" maxlength="12" type="tel" disabled pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" value="<?php echo $_SESSION["phone"] ?>" name="phoneNo">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="updateEmail">Email</label>
+									<input type="email" disabled="disabled" value="<?php echo $_SESSION["email"] ?>" class="form-control" id="updateEmail">
 
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center mb-3 pb-3">
-				<div class="col-md-12 heading-section text-center ftco-animate">
-					<span class="subheading">Products</span>
-					<h2 class="mb-4">Related Products</h2>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-12">
+								<div class="form-group mt-4">
+									<a href="dashboard.php">Change Phone Number or Email?</a>
+								</div>
+							</div>
+
+						</div>
+						<!-- END -->
+					</div>
+					<div class="col-xl-5">
+						<div class="row mt-5 pt-3">
+							<div class="col-md-12 d-flex mb-5">
+								<div class="cart-detail cart-total p-3 p-md-4">
+									<h3 class="billing-heading mb-4">Cart Total</h3>
+									<?php
+									$cart = $_SESSION['cartId'];
+									$query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
+									oci_execute($query);
+									$result = oci_fetch_assoc($query);
+									$discount = $result['AMOUNT'] * $result['DISCOUNT'] / 100;
+									?>
+									<p class="d-flex">
+										<span>Subtotal</span>
+										<span>$<?= number_format($result['AMOUNT'], 2); ?></span>
+									</p>
+									<p class="d-flex">
+										<span>Discount</span>
+										<span>$<?= number_format($discount, 2) ?></span>
+									</p>
+									<hr>
+									<p class="d-flex total-price">
+										<span>Total</span>
+										<span class="total-price" id="<?= $result['NET_AMOUNT'] ?>">$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
+									</p>
+								</div>
+							</div>
+
+							<div class="col-md-12">
+								<div class="cart-detail p-3 p-md-4">
+									<h3 class="billing-heading mb-4">Payment Method</h3>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+												<label><input type="radio" disabled name="optradio" class="mr-2"> Cash On Pickup</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+												<label><input type="radio" disabled name="optradio" class="mr-2"> Check
+													Payment</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+												<label><input type="radio" required name="optradio" class="mr-2"> Paypal</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="checkbox">
+												<label><input type="checkbox" value="" class="mr-2 validate" required> I have read and accept
+													the terms and conditions</label>
+											</div>
+										</div>
+									</div>
+									<p>
+										<div id="msg" class="mt-2 mb-4">
+
+										</div>
+										<div class="Checksubmit"><input type='submit' class="btn btn-block btn-dark" value="Proceed to Payment">
+										</div>
+									</p>
+
+								</div>
+							</div>
+						</div>
+
+					</div> <!-- .col-md-8 -->
 				</div>
-			</div>
+			</form>
 		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
-							<span class="status">30%</span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Bell Pepper</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Strawberry</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Green Beans</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Purple Cabbage</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+	</section> <!-- .section -->
 
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">
@@ -373,8 +293,10 @@ $result = oci_fetch_assoc($query);
 						<h2 class="ftco-heading-2">Have a Questions?</h2>
 						<div class="block-23 mb-3">
 							<ul>
-								<li><span class="icon icon-map-marker"></span><span class="text">11 Avenue Street, Cleckshudderfax, UK</span></li>
-								<li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+								<li><span class="icon icon-map-marker"></span><span class="text">11 Avenue Street,
+										Cleckshudderfax, UK</span></li>
+								<li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929
+											210</span></a></li>
 								<li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@cfx.com</span></a></li>
 							</ul>
 						</div>
@@ -413,8 +335,86 @@ $result = oci_fetch_assoc($query);
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/scrollax.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=ATzZLdq_nMR3SCYKscJAPQGqasL4TQi6p0i_nQjb-eeWCumq1_kyC3lhkDKozdaxDpZTUCXrh7oXa6TV&currency=GBP"></script>
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
+
+	<script>
+		var $ = jQuery;
+		$('.cart-total').click(function() {
+			sendReceipt();
+		});
+
+		$('#formBill').submit(function(e) {
+			e.preventDefault();
+			var add1 = $('#inputAddress').val();
+			var add2 = ($('#inputAddress2').val() != "") ? $('#inputaddress2').val() : "";
+			$.ajax({
+				url: 'verify.php',
+				method: 'get',
+				data: {
+					add1: add1,
+					add2: add2,
+					payment: 'save'
+				},
+				success: function(response) {
+
+					$('#msg').html('<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Information Updated. Checkout Now!</div></div>');
+
+					$('.Checksubmit').html("<div id='paypal-button-container'></div>");
+
+					paypal.Buttons({
+						style: {
+							shape: 'rect',
+							color: 'black',
+							layout: 'horizontal',
+							label: 'checkout',
+
+						},
+						createOrder: function(data, actions) {
+							return actions.order.create({
+								purchase_units: [{
+									amount: {
+										value: total
+									}
+								}]
+							});
+						},
+						onApprove: function(data, actions) {
+							return actions.order.capture().then(function(details) {
+								sendReceipt();
+								alert('Transaction completed by ' + details.payer.name.given_name + '!');
+							});
+						}
+					}).render('#paypal-button-container');
+
+					$('html, body').animate({
+						scrollTop: $(".Checksubmit").offset().top-500
+					}, 2000);
+				}
+			})
+		});
+
+		var total = parseFloat($('span.total-price').attr('id'));
+
+		function sendReceipt() {
+			var payment = "done";
+			$.ajax({
+				url: 'reciept.php',
+				method: 'post',
+				data: {
+					payment: payment,
+				},
+				success: function(data) {
+					if (data == 'OK')
+						alert('maile you recipt');
+					else
+						alert('not done');
+				}
+			});
+		}
+	</script>
+
 
 </body>
 
