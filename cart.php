@@ -108,15 +108,16 @@ if (isset($_SESSION['loggedin'])) {
 
 			<section class="ftco-section ftco-cart">
 				<div class="container">
-					<div class="row">
-						<div class="col-md-12 ftco-animate">
-							<?php
-							$cart = $_SESSION['cartId'];
-							$query = oci_parse($conn, "BEGIN :count := num_products('${cart}'); END;");
-							oci_bind_by_name($query, ":count", $count);
-							oci_execute($query);
-							if ($count > 0) {
-							?>
+					<?php
+					$cart = $_SESSION['cartId'];
+					$query = oci_parse($conn, "BEGIN :count := num_products('${cart}'); END;");
+					oci_bind_by_name($query, ":count", $count);
+					oci_execute($query);
+					if ($count > 0) {
+					?>
+						<div class="row">
+							<div class="col-md-12 ftco-animate">
+
 								<div class="cart-list">
 
 									<table class="table">
@@ -149,7 +150,7 @@ if (isset($_SESSION['loggedin'])) {
 														<p><?= $result['DESCRIPTION'] ?></p>
 													</td>
 
-													<td class="price">$<?= $result['PRICE'] ?></td>
+													<td class="price">$<?= number_format($result['PRICE'], 2); ?></td>
 
 													<td class="quantity">
 														<div class="input-group mb-3">
@@ -157,42 +158,48 @@ if (isset($_SESSION['loggedin'])) {
 														</div>
 													</td>
 
-													<td class="total"><?= $result['TOTAL'] ?></td>
+													<td class="total">$<?= number_format($result['TOTAL'], 2) ?></td>
 												</tr>
 											<?php } ?>
 										</tbody>
 									</table>
 
-								</div><?php } else {
-										echo "NO PRODUCTS IN CART";
-									} ?>
-						</div>
-					</div>
-					<div class="row justify-content-end">
-						<div class="col-lg-6 mt-5 cart-wrap ftco-animate">
-							<div class="cart-total mb-3">
-								<h3>Cart Totals</h3>
-								<p class="d-flex">
-									<span>Subtotal</span>
-									<span>$20.60</span>
-								</p>
-								<p class="d-flex">
-									<span>Delivery</span>
-									<span>$0.00</span>
-								</p>
-								<p class="d-flex">
-									<span>Discount</span>
-									<span>$3.00</span>
-								</p>
-								<hr>
-								<p class="d-flex total-price">
-									<span>Total</span>
-									<span>$17.60</span>
-								</p>
+								</div>
 							</div>
-							<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
 						</div>
-					</div>
+						<div class="row justify-content-end">
+							<div class="col-lg-6 mt-5 cart-wrap ftco-animate">
+								<div class="cart-total mb-3">
+									<h3>Cart Totals</h3>
+									<?php
+									$query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
+									oci_execute($query);
+									$result = oci_fetch_assoc($query);
+									$discount = $result['AMOUNT'] * $result['DISCOUNT'] / 100;
+									?>
+									<p class="d-flex">
+										<span>Subtotal</span>
+										<span>$<?= number_format($result['AMOUNT'], 2); ?></span>
+									</p>
+									<p class="d-flex">
+										<span>Discount</span>
+										<span>$<?= number_format($discount, 2) ?></span>
+									</p>
+									<hr>
+									<p class="d-flex total-price">
+										<span>Total</span>
+										<span class="total-price" id="<?= $result['NET_AMOUNT'] ?>">$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
+									</p>
+								</div>
+								<!-- <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p> -->
+								<div id="paypal-button-container"></div>
+
+
+							</div>
+						</div>
+					<?php } else {
+						echo "NO PRODUCTS IN CART";
+					} ?>
 				</div>
 			</section>
 
@@ -296,7 +303,9 @@ if (isset($_SESSION['loggedin'])) {
 					<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
 					<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
-
+			<script src="https://www.paypal.com/sdk/js?client-id=ATzZLdq_nMR3SCYKscJAPQGqasL4TQi6p0i_nQjb-eeWCumq1_kyC3lhkDKozdaxDpZTUCXrh7oXa6TV&currency=GBP">
+				// Required. Replace SB_CLIENT_ID with your sandbox client ID.
+			</script>
 			<script src="js/jquery.min.js"></script>
 			<script src="js/jquery-migrate-3.0.1.min.js"></script>
 			<script src="js/popper.min.js"></script>
@@ -314,41 +323,55 @@ if (isset($_SESSION['loggedin'])) {
 			<script src="js/google-map.js"></script>
 			<script src="js/main.js"></script>
 
+
 			<script>
-				$(document).ready(function() {
+				$('.cart-total').click(function() {
+					sendReceipt();
+				});
 
-					var quantitiy = 0;
-					$('.quantity-right-plus').click(function(e) {
+				var total = parseFloat($('span.total-price').attr('id'));
 
-						// Stop acting like a button
-						e.preventDefault();
-						// Get the field name
-						var quantity = parseInt($('#quantity').val());
-
-						// If is not undefined
-
-						$('#quantity').val(quantity + 1);
-
-
-						// Increment
-
-					});
-
-					$('.quantity-left-minus').click(function(e) {
-						// Stop acting like a button
-						e.preventDefault();
-						// Get the field name
-						var quantity = parseInt($('#quantity').val());
-
-						// If is not undefined
-
-						// Increment
-						if (quantity > 0) {
-							$('#quantity').val(quantity - 1);
+				function sendReceipt() {
+					var payment = "done";
+					$.ajax({
+						url: 'reciept.php',
+						method: 'post',
+						data: {
+							payment: payment,
+						},
+						success: function(data) {
+							if (data == 'OK')
+								alert('maile you recipt');
+							else
+								alert('not done');
 						}
 					});
+				}
 
-				});
+				paypal.Buttons({
+					style: {
+						shape: 'rect',
+						color: 'black',
+						layout: 'horizontal',
+						label: 'checkout',
+
+					},
+					createOrder: function(data, actions) {
+						return actions.order.create({
+							purchase_units: [{
+								amount: {
+									value: total
+								}
+							}]
+						});
+					},
+					onApprove: function(data, actions) {
+						return actions.order.capture().then(function(details) {
+							sendReceipt();
+							alert('Transaction completed by ' + details.payer.name.given_name + '!');
+						});
+					}
+				}).render('#paypal-button-container');
 			</script>
 
 		</body>
