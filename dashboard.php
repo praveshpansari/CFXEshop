@@ -160,10 +160,6 @@ if (isset($_SESSION['loggedin'])) {
                                         <div class="form-row">
                                             <div class="col-md-6">
                                                 <div id="errorInf">
-                                                    <div class="toast hide mb-3 mt-2" data-autohide="false" id="wrong_email">
-                                                        <div class="toast-header"><strong style="color:#f76666"> Error!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div>
-                                                        <div class="toast-body" style="text-align:left" id="error">Invalid Email!</div>
-                                                    </div>
                                                 </div>
                                                 <input type="hidden" id="userId" value="<?= $_SESSION['id'] ?>">
 

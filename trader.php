@@ -156,17 +156,20 @@ if (isset($_SESSION['loggedin'])) {
                         <div class="card-body">
                             <h5 class="card-title">Update Profile</h5>
                             <p class="card-text">
-                                <form id="updateProfile"><br>
+                                <form id="updateProfileT"><br>
                                     <fieldset class="accInfo">
                                         <h6>Account Information</h6>
                                         <div class="form-row">
                                             <div class="col-md-6">
                                                 <div id="errorInf">
                                                 </div>
+                                                <input type="hidden" id="userId" value="<?= $_SESSION['id'] ?>">
                                                 <div class="form-group">
                                                     <label for="updateEmail">Email</label><a href="" class="ml-5" id="editEmail">Edit</a>
                                                     <button id="saveEmail" class="btn btn-sm float-right btn-primary col-form-label px-3" style="display:none">SAVE</button>
-                                                    <input type="email" disabled="disabled" value="<?= $_SESSION["email"] ?>" class="form-control" id="updateEmail">
+                                                    <div id="upEm">
+                                                        <input type="email" disabled="disabled" value="<?= $_SESSION["email"] ?>" class="form-control" id="updateEmail">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="updatePassword">Password</label><a href="" class="ml-3" id="editPassword">Change Password</a>
@@ -188,53 +191,57 @@ if (isset($_SESSION['loggedin'])) {
                                     </fieldset><br>
                                     <hr>
                                     <br>
-
-                                    <fieldset class="personalInfo">
-                                        <h6>Personal Information</h6>
-                                        <div class="form-row align-items-start">
-                                            <div class="form-group col-md-6">
-                                                <label for="supplierName">Trader Name</label>
-                                                <input type="text" class="form-control" id="supplierName" name="supplier" value="<?= $_SESSION["user"] ?>">
-                                            </div>
-                                            <div class="form-group col-md-5 offset-md-1">
-                                                <label for="category">Category</label>
-                                                <select id="category" class="form-control" disabled>
-                                                    <?php
-                                                    $cat = $_SESSION['cat_name'];
-                                                    for ($x = 0; $x < count($cat['CATEGORY_NO']); $x++) {
-                                                        if ($cat['CATEGORY_NAME'][$x] == $_SESSION['cat']) {
-                                                            echo "<option selected value=" . $cat['CATEGORY_NO'][$x]  . ">" . $cat['CATEGORY_NAME'][$x] . "</option>";
-                                                        } else {
-                                                            echo "<option value=" . $cat['CATEGORY_NO'][$x]  . ">" . $cat['CATEGORY_NAME'][$x] . "</option>";
+                                    <div id="errInd">
+                                    </div>
+                                    <div id='personalInfo'>
+                                        <fieldset class="personalInfo">
+                                            <h6>Personal Information</h6>
+                                            <div class="form-row align-items-start">
+                                                <div class="form-group col-md-6">
+                                                    <label for="supplierName">Trader Name</label>
+                                                    <input type="text" class="form-control validate" maxlength="40" required id="supplierName" name="supplier" value="<?= $_SESSION["user"] ?>">
+                                                </div>
+                                                <div class="form-group col-md-5 offset-md-1">
+                                                    <label for="category">Category</label>
+                                                    <select id="category" class="form-control validate" required disabled>
+                                                        <?php
+                                                        $cat = $_SESSION['cat_name'];
+                                                        for ($x = 0; $x < count($cat['CATEGORY_NO']); $x++) {
+                                                            if ($cat['CATEGORY_NAME'][$x] == $_SESSION['cat']) {
+                                                                echo "<option selected value=" . $cat['CATEGORY_NO'][$x]  . ">" . $cat['CATEGORY_NAME'][$x] . "</option>";
+                                                            } else {
+                                                                echo "<option value=" . $cat['CATEGORY_NO'][$x]  . ">" . $cat['CATEGORY_NAME'][$x] . "</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>
+                                                        ?>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-row">
+                                            <div class="form-row">
 
-                                            <div class="form-group col-md-8">
-                                                <label for="website">Website</label>
-                                                <input type="text" class="form-control" id="website" name="website" value="<?= $_SESSION["website"] ?>">
+                                                <div class="form-group col-md-8">
+                                                    <label for="website">Website</label>
+                                                    <input type="text" class="form-control validate" maxlength="50" id="website" required name="website" value="<?= $_SESSION["website"] ?>">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="phone">Phone Number</label>
+                                                    <input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control validate" required value="<?= $_SESSION["phone"] ?>" name="phoneNo">
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="phone">Phone Number</label>
-                                                <input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control" value="<?= $_SESSION["phone"] ?>" name="phoneNo">
-                                            </div>
-                                        </div>
-                                    </fieldset><br>
+                                        </fieldset>
+                                    </div><br>
                                     <hr>
                                     <br>
+
                                     <fieldset class="address">
                                         <h6>Address Information</h6>
                                         <div class="form-group">
                                             <label for="inputAddress">Address</label>
-                                            <input type="text" class="form-control" id="inputAddress" value="<?= $_SESSION["add1"]; ?>" placeholder="1234 Main St">
+                                            <input type="text" class="form-control validate" maxlength="30" id="inputAddress" value="<?= $_SESSION["add1"]; ?>" placeholder="1234 Main St">
                                         </div>
                                         <div class="form-group">
                                             <label for="inputAddress2">Address 2</label>
-                                            <input type="text" class="form-control" id="inputAddress2" value="<?= $_SESSION["add2"]; ?>" placeholder="Apartment, studio, or floor">
+                                            <input type="text" class="form-control validate" maxlength="30" id="inputAddress2" value="<?= $_SESSION["add2"]; ?>" placeholder="Apartment, studio, or floor">
                                         </div>
                                     </fieldset>
                                     <button type="submit" class="btn btn-primary">Update</button>

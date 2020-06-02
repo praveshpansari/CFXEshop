@@ -70,7 +70,8 @@ if (isset($_SESSION['loggedin'])) {
                 $website = $_POST['website'];
                 $cat = $_POST['cat'];
                 $phone = $_POST['phone'];
-
+                $id = $_POST['id'];
+                
                 $_SESSION['website'] = $website;
                 $_SESSION['phone'] = $phone;
                 $_SESSION['user'] = $name;

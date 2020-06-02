@@ -482,6 +482,34 @@ $("#updateProfile").submit(function (e) {
 				$("#errInd").html('<div class="toast mb-5 mt-n3" data-autohide="false" id="wrong_info"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Invalid First Name or Last Name</div></div>');
 				$("#wrong_info").toast("show");
 			}
+		}
+	});
+});
+
+$("#updateProfileT").submit(function (e) {
+	e.preventDefault();
+	var id = $("#userId").val();
+	var name = $('#supplierName').val();
+	var cat = $('#category option:selected').val();
+	var website = $('#website').val();
+	var phone = $('#phone').val();
+	var add1 = $('#inputAddress').val();
+	var add2 = $('#inputAddress2').val();
+
+	$.ajax({
+		url: 'update-profile.php',
+		type: 'post',
+		data: { id: id, name: name, cat: cat, website: website, phone: phone, add1: add1, add2: add2 },
+		success: function (response) {
+
+			if (response == "successI") {
+				$("#personalInfo").load(window.location.href + " #personalInfo");
+				$("#errInd").html('<div class="toast mb-5 mt-n3" data-autohide="false" id="wrong_info"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Information Updated!</div></div>');
+				$("#wrong_info").toast("show");
+			} else if (response == 'format') {
+				$("#errInd").html('<div class="toast mb-5 mt-n3" data-autohide="false" id="wrong_info"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Invalid First Name or Last Name</div></div>');
+				$("#wrong_info").toast("show");
+			}
 
 
 		}
