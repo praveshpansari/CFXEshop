@@ -3,7 +3,9 @@ include 'connection.php';
 session_start();
 
 if (isset($_SESSION['loggedin'])) {
-	if (isset($_GET['add']) && isset($_GET['pid']) && isset($_GET['min'])) {
+	if ($_SESSION['type'] == 'trader') 
+		header('location:trader.php');
+	else if (isset($_GET['add']) && isset($_GET['pid']) && isset($_GET['min'])) {
 		$cart = $_SESSION['cartId'];
 		$pid = $_GET['pid'];
 		$min = $_GET['min'];
@@ -74,21 +76,13 @@ if (isset($_SESSION['loggedin'])) {
 
 					<div class="collapse navbar-collapse" id="ftco-nav">
 						<ul class="navbar-nav ml-auto">
-							<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-							<li class="nav-item active dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-								<div class="dropdown-menu" aria-labelledby="dropdown04">
-									<a class="dropdown-item" href="shop.html">Shop</a>
-									<a class="dropdown-item" href="wishlist.html">Wishlist</a>
-									<a class="dropdown-item" href="product-single.html">Single Product</a>
-									<a class="dropdown-item" href="cart.html">Cart</a>
-									<a class="dropdown-item" href="checkout.html">Checkout</a>
-								</div>
-							</li>
-							<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-							<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-							<li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
+							<li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="shop.php">Shop</a></li>
+							<li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+							<li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+							<li class="nav-item"><a href="dashboard.php" class="nav-link">Profile</a></li>
+							<li class="nav-item active cta cta-colored"><a href="cart.php" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+							<li class="nav-item btn-nav"><a href="logout.php" class="nav-link">LOGOUT</a></li>
 						</ul>
 					</div>
 				</div>
@@ -99,7 +93,7 @@ if (isset($_SESSION['loggedin'])) {
 				<div class="container">
 					<div class="row no-gutters slider-text align-items-center justify-content-center">
 						<div class="col-md-9 ftco-animate text-center">
-							<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
+							<p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>Cart</span></p>
 							<h1 class="mb-0 bread">My Cart</h1>
 						</div>
 					</div>
@@ -191,19 +185,7 @@ if (isset($_SESSION['loggedin'])) {
 										<span>$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
 									</p>
 								</div>
-
-
-								<div class="input-group date" data-provide="datepicker">
-									<input type="text" class="form-control">
-									<div class="input-group-addon">
-										<span class="glyphicon glyphicon-th"></span>
-									</div>
-								</div>
-
 								<p><a href="checkout.php" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
-								
-
-
 							</div>
 						</div>
 					<?php } else {
@@ -338,5 +320,5 @@ if (isset($_SESSION['loggedin'])) {
 		</html>
 <?php }
 } else {
-	echo "not";
+	echo "Page not found";
 } ?>

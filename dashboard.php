@@ -4,14 +4,16 @@
 session_start();
 if (isset($_SESSION['loggedin'])) {
     if ($_SESSION['loggedin']) {
+        if ($_SESSION['type'] != 'customer')
+            header('location:trader.php');
     } else {
         echo "You are logged out. Please log in. Redirecting...";
-        header('Refresh: 2,URL=http://localhost/website/index.html');
+        header('Refresh: 2,URL=http://localhost/website/index.php');
         die();
     }
 } else {
     echo "You are not allowed to access this page.Redirecting...";
-    header('Refresh: 2,URL=http://localhost/website/index.html');
+    header('Refresh: 2,URL=http://localhost/website/index.php');
     die();
 } ?>
 
@@ -99,22 +101,13 @@ if (isset($_SESSION['loggedin'])) {
 
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdown04">
-                            <a class="dropdown-item" href="shop.php">Shop</a>
-                            <a class="dropdown-item" href="wishlist.html">Wishlist</a>
-                            <a class="dropdown-item" href="product-single.html">Single Product</a>
-                            <a class="dropdown-item" href="cart.html">Cart</a>
-                            <a class="dropdown-item" href="checkout.html">Checkout</a>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-                    <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+                    <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="shop.php" class="nav-link">Shop</a></li>
+                    <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+                    <li class="nav-item active"><a href="dashboard.php" class="nav-link">Profile</a></li>
+                    <li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
                     <li class="nav-item btn-nav"><a href="logout.php" class="nav-link">LOGOUT</a></li>
-
                 </ul>
             </div>
         </div>
@@ -166,15 +159,25 @@ if (isset($_SESSION['loggedin'])) {
                                         <h6>Account Information</h6>
                                         <div class="form-row">
                                             <div class="col-md-6">
+                                                <div id="errorInf">
+                                                    <div class="toast hide mb-3 mt-2" data-autohide="false" id="wrong_email">
+                                                        <div class="toast-header"><strong style="color:#f76666"> Error!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div>
+                                                        <div class="toast-body" style="text-align:left" id="error">Invalid Email!</div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="userId" value="<?= $_SESSION['id'] ?>">
+
                                                 <div class="form-group">
                                                     <label for="updateEmail">Email</label><a href="" class="ml-5" id="editEmail">Edit</a>
                                                     <button id="saveEmail" class="btn btn-sm float-right btn-primary col-form-label px-3" style="display:none">SAVE</button>
-                                                    <input type="email" disabled="disabled" value="<?php echo $_SESSION["email"] ?>" class="form-control" id="updateEmail">
+                                                    <div id="upEm">
+                                                        <input type="email" disabled="disabled" value="<?php echo $_SESSION["email"] ?>" class="form-control" id="updateEmail">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="updatePassword">Password</label><a href="" class="ml-3" id="editPassword">Change Password</a>
                                                     <button id="savePassword" class="btn btn-sm float-right btn-primary col-form-label px-3" style="display:none">SAVE</button>
-                                                    <input type="password" disabled="disabled" class="form-control" id="updatePassword">
+                                                    <input type="password" disabled="disabled" value="" class="form-control" id="updatePassword">
                                                 </div>
                                             </div>
 
@@ -191,61 +194,66 @@ if (isset($_SESSION['loggedin'])) {
                                     </fieldset><br>
                                     <hr>
                                     <br>
-                                    <fieldset class="personalInfo">
-                                        <h6>Personal Information</h6>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="firstName">First Name</label>
-                                                <input type="text" class="form-control" id="firstName" value="<?php echo $_SESSION["first"] ?>">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="lastName">Last Name</label>
-                                                <input type="text" class="form-control" id="lastName" value="<?php echo $_SESSION["last"] ?>">
-                                            </div>
+                                    <div id="errInd">
                                         </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                                <label>
-                                                    <h6 style="font-weight: normal">Sex</h6>
-                                                </label><br>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" id="male" name="gender" class="custom-control-input">
-                                                    <label class="custom-control-label" style="color:#82ae46;" for="male">
-                                                        <h6>Male</h6>
-                                                    </label>
-                                                </div>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" id="female" name="gender" class="custom-control-input">
-                                                    <label class="custom-control-label" style="color:#82ae46" for="female">
-                                                        <h6>Female</h6>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label for="phone">Phone Number</label>
-                                                <input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control" value="<?php echo $_SESSION["phone"] ?>" name="phoneNo">
-                                            </div>
-                                            <div class="form-group col-md-3 offset-md-1">
-                                                <label for="age" class="ml-2">Age</label>
-                                                <input type="range" class="custom-range col-10 ml-2" value="<?php echo $_SESSION["age"] ?>" name="age" id="age" min="16" max="100" onchange="updateAge(this.value)" />
-                                                <span id="ageValue" class="offset-10">20</span>
-                                            </div>
-                                        </div>
-                                    </fieldset><br>
-                                    <hr>
-                                    <br>
-                                    <fieldset class="address">
-                                        <h6>Address Information</h6>
-                                        <div class="form-group">
-                                            <label for="inputAddress">Address</label>
-                                            <input type="text" class="form-control" id="inputAddress" value="<?php echo $_SESSION["add1"]; ?>" placeholder="1234 Main St">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputAddress2">Address 2</label>
-                                            <input type="text" class="form-control" id="inputAddress2" value="<?php echo $_SESSION["add2"]; ?>" placeholder="Apartment, studio, or floor">
-                                        </div>
-                                    </fieldset>
+                                    <div id="personalInfo">
+                                        
+                                        <fieldset class="personalInfo">
 
+                                            <h6>Personal Information</h6>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="firstName">First Name</label>
+                                                    <input type="text" class="form-control validate" id="firstName" value="<?php echo $_SESSION["first"] ?>" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="lastName">Last Name</label>
+                                                    <input type="text" class="form-control validate" id="lastName" value="<?php echo $_SESSION["last"] ?>" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label>
+                                                        <h6 style="font-weight: normal">Sex</h6>
+                                                    </label><br>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="male" <?php echo ($_SESSION['sex'] == 'M') ?  "checked" : '' ?> value="M" name="gender" class="custom-control-input">
+                                                        <label class="custom-control-label" style="color:#82ae46;" for="male">
+                                                            <h6>Male</h6>
+                                                        </label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" id="female" <?php echo ($_SESSION['sex'] == 'F') ? "checked" : '' ?> value="F" name="gender" class="custom-control-input">
+                                                        <label class="custom-control-label" style="color:#82ae46" for="female">
+                                                            <h6>Female</h6>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="phone">Phone Number</label>
+                                                    <input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control validate" value="<?php echo $_SESSION["phone"] ?>" name="phoneNo" required>
+                                                </div>
+                                                <div class="form-group col-md-3 offset-md-1">
+                                                    <label for="age" class="ml-2">Age</label>
+                                                    <input type="range" class="custom-range col-10 ml-2" value="<?php echo $_SESSION["age"] ?>" name="age" id="age" min="16" max="100" onchange="updateAge(this.value)" />
+                                                    <span id="ageValue" class="offset-10"><?php echo $_SESSION["age"] ?></span>
+                                                </div>
+                                            </div>
+                                        </fieldset><br>
+                                        <hr>
+                                        <br>
+                                        <fieldset class="address">
+                                            <h6>Address Information</h6>
+                                            <div class="form-group">
+                                                <label for="inputAddress">Address</label>
+                                                <input type="text" class="form-control validate" id="inputAddress" maxlength="30" value="<?php echo $_SESSION["add1"]; ?>" placeholder="1234 Main St">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputAddress2">Address 2</label>
+                                                <input type="text" class="form-control validate" id="inputAddress2" maxlength="30" value="<?php echo $_SESSION["add2"]; ?>" placeholder="Apartment, studio, or floor">
+                                            </div>
+                                        </fieldset>
+                                    </div>
 
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>

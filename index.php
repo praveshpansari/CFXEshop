@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
+	header('location:trader.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,8 +13,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
-		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
 
@@ -39,29 +45,24 @@
 				<div class="modal-header">
 					<h5 class="modal-title">
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login"
-								role="tab" aria-controls="nav-login" aria-selected="true">Login</a>
+							<a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab" aria-controls="nav-login" aria-selected="true">Login</a>
 
-							<a class="nav-item nav-link" id="nav-register-tab" data-toggle="tab" href="#nav-register"
-								role="tab" aria-controls="nav-register" aria-selected="false">Register</a>
+							<a class="nav-item nav-link" id="nav-register-tab" data-toggle="tab" href="#nav-register" role="tab" aria-controls="nav-register" aria-selected="false">Register</a>
 
 						</div>
 					</h5><button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
 					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade show active" id="nav-login" role="tabpanel"
-							aria-labelledby="nav-login-tab">
+						<div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
 							<form class="bg-white p-3 login-form" id="loginForm">
 								<div class="form-group">
 									<label for="emailId">Email address</label>
-									<input id="emailId" name="emailId" type="text" class="form-control validate"
-										placeholder="Enter email" required>
+									<input id="emailId" name="emailId" type="text" class="form-control validate" placeholder="Enter email" required>
 								</div>
 								<div class="form-group">
 									<label for="password">Password</label>
-									<input id="password" name="password" type="password" class="form-control validate"
-										placeholder="Password" required>
+									<input id="password" name="password" type="password" class="form-control validate" placeholder="Password" required>
 								</div>
 								<div class="form-group">
 									<input type="submit" id="loginBtn" value="Login" class="btn btn-primary py-2 px-5">
@@ -76,59 +77,49 @@
 								<div class="form-row mb-3">
 									<div class="col-md-6 col-sm-12">
 										<label for="first_name">First Name</label>
-										<input id="first_name" type="text" class="form-control validate" maxlength="25"
-											name="first_name" required>
+										<input id="first_name" type="text" class="form-control validate" maxlength="25" name="first_name" required>
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<label for="last_name">Last Name</label>
-										<input id="last_name" type="text" class="form-control validate" maxlength="25"
-											name="last_name" required>
+										<input id="last_name" type="text" class="form-control validate" maxlength="25" name="last_name" required>
 									</div>
 								</div>
 								<div class="form-row mb-3">
 									<div class="col-12">
 										<label for="registerEmail">Email</label>
-										<input id="registerEmail" type="text" class="form-control validate"
-											maxlength="40" name="registerEmail" required>
+										<input id="registerEmail" type="text" class="form-control validate" maxlength="40" name="registerEmail" required>
 									</div>
 								</div>
 								<div class="form-row mb-3">
 									<div class="col-6">
 										<label for="username">Username</label>
-										<input id="username" type="text" class="form-control validate" maxlength="25"
-											minlength="6" name="username" required>
+										<input id="username" type="text" class="form-control validate" maxlength="25" minlength="6" name="username" required>
 									</div>
 									<div class="col-6">
 										<label for="registerPassword">Password</label>
-										<input id="registerPassword" type="password" class="form-control validate"
-											maxlength="20" minlength="6" name="registerPassword" required>
+										<input id="registerPassword" type="password" class="form-control validate" maxlength="20" minlength="6" name="registerPassword" required>
 									</div>
 								</div>
 								<div class="form-row mb-3">
 									<div class="col-6">
 										<label for="phone">Phone Number</label>
-										<input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-											placeholder="123-456-7890" class="form-control validate" data-length="20"
-											name="phone" required>
+										<input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control validate" data-length="20" name="phone" required>
 									</div>
 									<div class="col-6">
 										<label for="age" class="ml-2">Age</label>
-										<input type="range" class="custom-range col-10 ml-2" value="20" name="age"
-											id="age" min="16" max="100" onchange="updateAge(this.value)" />
+										<input type="range" class="custom-range col-10 ml-2" value="20" name="age" id="age" min="16" max="100" onchange="updateAge(this.value)" />
 										<span id="ageValue" class="offset-10">20</span>
 									</div>
 								</div>
 								<div class="form-row mb-3">
 									<div class="col-12 custom-control custom-checkbox">
-										<input type="checkbox" class="form-control custom-control-input" id="conditions"
-											required name="terms" />
+										<input type="checkbox" class="form-control custom-control-input" id="conditions" required name="terms" />
 										<label class="custom-control-label" for="conditions">I agree to the terms and
 											conditions.</label>
 									</div>
 								</div>
 								<div class="form-row mb-3">
-									<button class="btn btn-primary col s12 z-depth-0" id="registerBtn"
-										type="submit">Register
+									<button class="btn btn-primary col s12 z-depth-0" id="registerBtn" type="submit">Register
 									</button>
 								</div>
 							</form>
@@ -151,13 +142,11 @@
 				<div class="col-lg-12 d-block">
 					<div class="row d-flex">
 						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
-									class="icon-phone2"></span></div>
+							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
 							<span class="text">+ 1235 2355 98</span>
 						</div>
 						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
-									class="icon-paper-plane"></span></div>
+							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
 							<span class="text">eshop@cfx.com</span>
 						</div>
 						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
@@ -170,34 +159,26 @@
 	</div>
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="index.html">CFX eShop</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
-				aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+			<a class="navbar-brand" href="index.php">CFX eShop</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
 			</button>
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">Shop</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="shop.php">Shop</a>
-							<a class="dropdown-item" href="wishlist.html">Wishlist</a>
-							<a class="dropdown-item" href="product-single.html">Single Product</a>
-							<a class="dropdown-item" href="cart.html">Cart</a>
-							<a class="dropdown-item" href="checkout.html">Checkout</a>
-						</div>
-					</li>
-					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-					<li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
-								class="icon-shopping_cart"></span>[0]</a></li>
-					<li class="nav-item btn-nav"><a class="nav-link" data-toggle="modal"
-							data-target="#myModal">LOGIN</a></li>
-
-
+					<li class="nav-item active"><a href="index.php" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="shop.php" class="nav-link">Shop</a></li>
+					<li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+					<li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+					<?php
+					if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+						echo '<li class="nav-item"><a href="dashboard.php" class="nav-link">Profile</a></li>
+						<li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link">
+						<span class="icon-shopping_cart" id="products-cart"></span>[0]</a></li>
+						<li class="nav-item btn-nav"><a class="nav-link" href="logout.php">LOGOUT</a></li>';
+					} else {
+						echo '<li class="nav-item btn-nav"><a class="nav-link" data-toggle="modal" data-target="#myModal">LOGIN</a></li>';
+					} ?>
 				</ul>
 			</div>
 		</div>
@@ -294,8 +275,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<div class="row">
-						<div class="col-md-6 order-md-last d-flex"
-							style="align-content:space-between;flex-wrap:wrap;flex-basis: 100%;">
+						<div class="col-md-6 order-md-last d-flex" style="align-content:space-between;flex-wrap:wrap;flex-basis: 100%;">
 							<div class="category-wrap-2 ftco-animate my-4 d-flex">
 								<div class="text text-center">
 									<h2>Fresh Foods</h2>
@@ -304,8 +284,7 @@
 
 								</div>
 							</div>
-							<div class="category-wrap ftco-animate img d-flex align-items-end"
-								style="background-image: url(images/category-1.jpg);">
+							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
 								<div class="text px-3 py-1">
 									<h2 class="mb-0"><a href="#">Fruits &amp; Vegetables</a></h2>
 								</div>
@@ -313,14 +292,12 @@
 						</div>
 
 						<div class="col-md-6">
-							<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
-								style="background-image: url(images/category-1.jpg);">
+							<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
 								<div class="text px-3 py-1">
 									<h2 class="mb-0"><a href="#">Meat</a></h2>
 								</div>
 							</div>
-							<div class="category-wrap ftco-animate img d-flex align-items-end"
-								style="background-image: url(images/category-2.jpg);">
+							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-2.jpg);">
 								<div class="text px-3 py-1">
 									<h2 class="mb-0"><a href="#">Fishes</a></h2>
 								</div>
@@ -330,14 +307,12 @@
 				</div>
 
 				<div class="col-md-4">
-					<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
-						style="background-image: url(images/category-3.jpg);">
+					<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-3.jpg);">
 						<div class="text px-3 py-1">
 							<h2 class="mb-0"><a href="#">Bakery</a></h2>
 						</div>
 					</div>
-					<div class="category-wrap ftco-animate img d-flex align-items-end"
-						style="background-image: url(images/category-4.jpg);">
+					<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-4.jpg);">
 						<div class="text px-3 py-1">
 							<h2 class="mb-0"><a href="#">Deli</a></h2>
 						</div>
@@ -361,8 +336,7 @@
 			<div class="row">
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
 							<span class="status">30%</span>
 							<div class="overlay"></div>
 						</a>
@@ -370,14 +344,12 @@
 							<h3><a href="#">Bell Pepper</a></h3>
 							<div class="d-flex">
 								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">$120.00</span><span
-											class="price-sale">$80.00</span></p>
+									<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -393,8 +365,7 @@
 				</div>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template">
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
@@ -406,8 +377,7 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -423,8 +393,7 @@
 				</div>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg" alt="Colorlib Template">
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
@@ -436,8 +405,7 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -453,8 +421,7 @@
 				</div>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template">
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
@@ -466,8 +433,7 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -485,8 +451,7 @@
 
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-5.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-5.jpg" alt="Colorlib Template">
 							<span class="status">30%</span>
 							<div class="overlay"></div>
 						</a>
@@ -494,14 +459,12 @@
 							<h3><a href="#">Tomatoe</a></h3>
 							<div class="d-flex">
 								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">$120.00</span><span
-											class="price-sale">$80.00</span></p>
+									<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
 								</div>
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -517,8 +480,7 @@
 				</div>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-6.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-6.jpg" alt="Colorlib Template">
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
@@ -530,8 +492,7 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -547,8 +508,7 @@
 				</div>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-7.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-7.jpg" alt="Colorlib Template">
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
@@ -560,8 +520,7 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -577,8 +536,7 @@
 				</div>
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-8.jpg"
-								alt="Colorlib Template">
+						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-8.jpg" alt="Colorlib Template">
 							<div class="overlay"></div>
 						</a>
 						<div class="text py-3 pb-4 px-3 text-center">
@@ -590,8 +548,7 @@
 							</div>
 							<div class="bottom-area d-flex px-3">
 								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
+									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
 										<span><i class="ion-ios-menu"></i></span>
 									</a>
 									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
@@ -706,8 +663,7 @@
 										Cleckshudderfax, UK</span></li>
 								<li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929
 											210</span></a></li>
-								<li><a href="#"><span class="icon icon-envelope"></span><span
-											class="text">info@cfx.com</span></a></li>
+								<li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@cfx.com</span></a></li>
 							</ul>
 						</div>
 					</div>
@@ -728,8 +684,7 @@
 	<!-- loader -->
 	<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
 			<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
-				stroke="#F96D00" /></svg></div>
+			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
 
 	<script src="js/jquery.min.js"></script>

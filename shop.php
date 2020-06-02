@@ -1,6 +1,9 @@
 <?php
 include 'connection.php';
-
+session_start();
+if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
+	header('location:trader.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +39,106 @@ include 'connection.php';
 </head>
 
 <body class="goto-here">
+	
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content modal-dialog">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab" aria-controls="nav-login" aria-selected="true">Login</a>
+
+							<a class="nav-item nav-link" id="nav-register-tab" data-toggle="tab" href="#nav-register" role="tab" aria-controls="nav-register" aria-selected="false">Register</a>
+
+						</div>
+					</h5><button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="tab-content" id="nav-tabContent">
+						<div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
+							<form class="bg-white p-3 login-form" id="loginForm">
+								<div class="form-group">
+									<label for="emailId">Email address</label>
+									<input id="emailId" name="emailId" type="text" class="form-control validate" placeholder="Enter email" required>
+								</div>
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input id="password" name="password" type="password" class="form-control validate" placeholder="Password" required>
+								</div>
+								<div class="form-group">
+									<input type="submit" id="loginBtn" value="Login" class="btn btn-primary py-2 px-5">
+									<label class="offset-2"><a href="#">Forgot password?</a></label>
+								</div>
+
+							</form>
+						</div>
+
+						<div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
+							<form class="bg-white p-3 register-form" id="registerForm" action="" method="post">
+								<div class="form-row mb-3">
+									<div class="col-md-6 col-sm-12">
+										<label for="first_name">First Name</label>
+										<input id="first_name" type="text" class="form-control validate" maxlength="25" name="first_name" required>
+									</div>
+									<div class="col-md-6 col-sm-12">
+										<label for="last_name">Last Name</label>
+										<input id="last_name" type="text" class="form-control validate" maxlength="25" name="last_name" required>
+									</div>
+								</div>
+								<div class="form-row mb-3">
+									<div class="col-12">
+										<label for="registerEmail">Email</label>
+										<input id="registerEmail" type="text" class="form-control validate" maxlength="40" name="registerEmail" required>
+									</div>
+								</div>
+								<div class="form-row mb-3">
+									<div class="col-6">
+										<label for="username">Username</label>
+										<input id="username" type="text" class="form-control validate" maxlength="25" minlength="6" name="username" required>
+									</div>
+									<div class="col-6">
+										<label for="registerPassword">Password</label>
+										<input id="registerPassword" type="password" class="form-control validate" maxlength="20" minlength="6" name="registerPassword" required>
+									</div>
+								</div>
+								<div class="form-row mb-3">
+									<div class="col-6">
+										<label for="phone">Phone Number</label>
+										<input id="phone" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control validate" data-length="20" name="phone" required>
+									</div>
+									<div class="col-6">
+										<label for="age" class="ml-2">Age</label>
+										<input type="range" class="custom-range col-10 ml-2" value="20" name="age" id="age" min="16" max="100" onchange="updateAge(this.value)" />
+										<span id="ageValue" class="offset-10">20</span>
+									</div>
+								</div>
+								<div class="form-row mb-3">
+									<div class="col-12 custom-control custom-checkbox">
+										<input type="checkbox" class="form-control custom-control-input" id="conditions" required name="terms" />
+										<label class="custom-control-label" for="conditions">I agree to the terms and
+											conditions.</label>
+									</div>
+								</div>
+								<div class="form-row mb-3">
+									<button class="btn btn-primary col s12 z-depth-0" id="registerBtn" type="submit">Register
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div id="registering">
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<div class="py-1 bg-primary">
 		<div class="container">
 			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
@@ -66,21 +169,18 @@ include 'connection.php';
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-					<li class="nav-item active dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="shop.html">Shop</a>
-							<a class="dropdown-item" href="wishlist.html">Wishlist</a>
-							<a class="dropdown-item" href="product-single.html">Single Product</a>
-							<a class="dropdown-item" href="cart.html">Cart</a>
-							<a class="dropdown-item" href="checkout.html">Checkout</a>
-						</div>
-					</li>
-					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-					<li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
+					<li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+					<li class="nav-item active"><a class="nav-link" href="shop.php">Shop</a></li>
+					<li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+					<li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+					<?php
+					if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+						echo '<li class="nav-item"><a href="dashboard.php" class="nav-link">Profile</a></li><li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link">
+						<span class="icon-shopping_cart" id="products-cart"></span>[0]</a></li>
+						<li class="nav-item btn-nav"><a class="nav-link" href="logout.php">LOGOUT</a></li>';
+					} else {
+						echo '<li class="nav-item btn-nav"><a class="nav-link" data-toggle="modal" data-target="#myModal">LOGIN</a></li>';
+					} ?>
 				</ul>
 			</div>
 		</div>
@@ -91,7 +191,7 @@ include 'connection.php';
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span>
+					<p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>Shop</span>
 					</p>
 					<h1 class="mb-0 bread">Products</h1>
 				</div>

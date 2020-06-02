@@ -14771,3 +14771,27 @@ textarea.form-control {
     stroke-dashoffset: -136px;
   }
 }
+
+.alert.hidden {
+  display:none;
+}
+
+.parentDisable {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 999;
+
+  background-color: rgba(0, 0, 0, 0.3);
+  /* black semi-transparent */
+}
+
+.edit-product {
+  transition: ease-in-out 0.3s;
+}
+
+.edit-product:hover {
+  transition: ease-in-out 0.3s;
+}

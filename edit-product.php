@@ -38,7 +38,7 @@ if (isset($_GET['view'])) {
             "</ul>
     </nav>
     <div class='table-responsive'>
-        <table class='table'>
+        <table class='table table-hover'>
             <thead class='thead-dark'>
                 <tr>
                     <th scope='col' style='width: 21%'>Product Image</th>
@@ -53,7 +53,7 @@ if (isset($_GET['view'])) {
         $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY PRODUCT_NAME) MyRow FROM SUPPLIER_PRODUCTS t WHERE SUPPLIER_ID = '${id}') WHERE MyRow BETWEEN '${start}' AND '${upper}' ORDER BY {$sort} ");
         oci_execute($query);
         while ($result = oci_fetch_assoc($query)) {
-            $output .= "<tr class='edit-product' id='" . $result['PRODUCT_ID'] . "'>
+            $output .= "<tr class='edit-product' style='cursor:pointer' id='" . $result['PRODUCT_ID'] . "'>
                         <td style='padding-top:5px;padding-bottom:5px'><img class='img-fluid' src='" . $result['PRODUCT_IMAGE'] . "'></td>
                         <td>" . $result['PRODUCT_NAME'] . "</td>
                         <td>$" . $result['PRICE'] . "</td>

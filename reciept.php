@@ -5,22 +5,38 @@ session_start();
 
 use Dompdf\Dompdf;
 
-if (isset($_POST['payment'])) {
+if (isset($_SESSION['loggedin'])) {
 
-  $cart = $_SESSION['cartId'];
-  $f = $_SESSION['first'];
-  $l = $_SESSION['last'];
-  $cmail = $_SESSION['email'];
-  $add1 = $_SESSION['add1'];
-  $add2 = $_SESSION['add2'];
-  $tid = md5(time() . $f);
-  $query = oci_parse($conn, "INSERT INTO INVOICE VALUES (DEFAULT,'{$tid}',DEFAULT,DEFAULT,'{$cart}' )");
-  oci_execute($query);
-  $query = oci_parse($conn, "SELECT * FROM INVOICE WHERE CART_ID = '${cart}' AND TRANSACTION_ID = '{$tid}'");
-  oci_execute($query);
-  $result = oci_fetch_assoc($query);
-  $document = new Dompdf();
-  $output = '
+  if (isset($_POST['payment'])) {
+
+    $query = oci_parse($conn, "BEGIN :count := num_products('{$cart}'); END;");
+    oci_bind_by_name($query, ":count", $count);
+    oci_execute($query);
+    if ($count == 0) {
+
+      $cart = $_SESSION['cartId'];
+      $slot = $_POST['slot'];
+      $f = $_SESSION['first'];
+      $l = $_SESSION['last'];
+      $cmail = $_SESSION['email'];
+      $add1 = $_SESSION['add1'];
+      $add2 = $_SESSION['add2'];
+      $tid = md5(time() . $f);
+      $query = oci_parse($conn, "INSERT INTO INVOICE VALUES (DEFAULT,'{$tid}',DEFAULT,DEFAULT,'{$slot}','{$cart}' )");
+      oci_execute($query);
+      $query = oci_parse($conn, "UPDATE COLLECTION_SLOT SET ORDERS = ORDERS + 1 WHERE SLOT_ID = '${slot}'");
+      oci_execute($query);
+      $query = oci_parse($conn, "SELECT * FROM INVOICE WHERE CART_ID = '${cart}' AND TRANSACTION_ID = '{$tid}'");
+      oci_execute($query);
+      $result = oci_fetch_assoc($query);
+      $query = oci_parse($conn, "SELECT * FROM AVAILABLE_SLOTS WHERE SLOT_ID = '${slot}'");
+      oci_execute($query);
+      $time = oci_fetch_assoc($query);
+
+      $invoice = $result["INVOICE_NO"];
+      $cid = $_SESSION['id'];
+      $document = new Dompdf();
+      $output = '
 <head>
 <link rel="stylesheet" href="css/bootstrap.min.css">
   <style>
@@ -39,7 +55,7 @@ if (isset($_POST['payment'])) {
       margin: 0 auto;
       color: #555555;
       background: #FFFFFF;
-      font-family: Arial, sans-serif;
+      font-family: Calibri;
       font-size: 14px;
       font-family: SourceSansPro;
     }
@@ -180,6 +196,13 @@ if (isset($_POST['payment'])) {
 
     }
 
+    strong {
+      font-weight:bold;
+      font-family:Calibri !important;
+      font-size:0.65rem;
+      color: #0087C3;
+    }
+
     table tfoot tr td:first-child {
       border: none;
     }
@@ -250,28 +273,33 @@ if (isset($_POST['payment'])) {
       </thead>
       <tbody>';
 
-  $query = oci_parse($conn, "SELECT * FROM PRODUCTS_IN_CART WHERE CART_ID = '${cart}'");
-  oci_execute($query);
-  $count = 1;
-  while ($result = oci_fetch_assoc($query)) {
-
-    $output .= "<tr>
+      $query = oci_parse($conn, "SELECT * FROM PRODUCTS_IN_CART WHERE CART_ID = '${cart}'");
+      oci_execute($query);
+      $count = 1;
+      while ($result = oci_fetch_assoc($query)) {
+        $pid = $result['PRODUCT_ID'];
+        $sid = $result['SHOP_ID'];
+        $q = $result['ITEM_QUANTITY'];
+        $pr = $result['TOTAL'];
+        $query2 = oci_parse($conn, "INSERT INTO ORDERS VALUES ('{$cid}','{$invoice}','{$pid}','{$sid}','{$q}','{$pr}')");
+        oci_execute($query2);
+        $output .= "<tr>
           <td class='no'>$count</td>
           <td class='desc'>
             <h3>" . $result['PRODUCT_NAME'] . "</h3>
           </td>
           <td class='unit'>$" . $result['PRICE'] . "</td>
-          <td class='qty'>" . $result['ITEM_QUANTITY'] . "</td>
-          <td class='total'>$" . $result['TOTAL'] . "</td>
+          <td class='qty'>$q</td>
+          <td class='total'>$$pr</td>
         </tr>";
-    $count++;
-  }
-  $query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
-  oci_execute($query);
-  $result = oci_fetch_assoc($query);
-  $discount = $result['AMOUNT'] * $result['DISCOUNT'] / 100;
-  $output .=
-    '</tbody>
+        $count++;
+      }
+      $query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
+      oci_execute($query);
+      $result = oci_fetch_assoc($query);
+      $discount = $result['AMOUNT'] * $result['DISCOUNT'] / 100;
+      $output .=
+        '</tbody>
       <tfoot>
         <tr>
           <td colspan="2"></td>
@@ -290,6 +318,7 @@ if (isset($_POST['payment'])) {
         </tr>
       </tfoot>
     </table>
+    <div><strong>COLLECTION TIME:</strong> ' . $time['START_TIME'] . ':00-' . $time['END_TIME'] . ':00<br><strong>COLLECTION DATE: </strong>' . $time['DAY'] . ' - ' . $time['FULL_DATE'] .  '</div>
     <div id="thanks">Thank you!</div>
     <div id="notices">
       <div>NOTICE:</div>
@@ -301,57 +330,69 @@ if (isset($_POST['payment'])) {
   </footer>
 </body>';
 
-  $document->loadHtml($output);
+      $document->loadHtml($output);
 
-  $document->setPaper('a4', 'portrait');
+      $document->setPaper('a4', 'portrait');
 
-  //Render the HTML as PDF
-  $document->render();
+      //Render the HTML as PDF
+      $document->render();
 
-  $name = 'temp/receipt/' . md5(time() . 'receipt') . '.pdf';
-  $pdf = $document->output();
-  file_put_contents($name, $pdf);
+      $name = md5(time() . 'receipt') . '.pdf';
+      $pdf = $document->output();
+      file_put_contents($name, $pdf);
 
-  $file = $name;
+      $file = $name;
 
-  $mailto = $cmail;
-  $subject = 'Payment Completed';
-  $message = 'Thank you for purchasing from CFX eShop. Find your payment information attached to this mail.';
+      $mailto = $cmail;
+      $subject = 'Payment Completed';
+      $message = 'Thank you for purchasing from CFX eShop. Find your payment information attached to this mail.';
 
-  $content = file_get_contents($file);
-  $content = chunk_split(base64_encode($content));
+      $content = file_get_contents($file);
+      $content = chunk_split(base64_encode($content));
 
-  // a random hash will be necessary to send mixed content
-  $separator = md5(time());
+      // a random hash will be necessary to send mixed content
+      $separator = md5(time());
 
-  // carriage return type (RFC)
-  $eol = "\r\n";
+      // carriage return type (RFC)
+      $eol = "\r\n";
 
-  // main header (multipart mandatory)
-  $headers = "From: CFX eShop <cfxeshop@gmail.com>" . $eol;
-  $headers .= "MIME-Version: 1.0" . $eol;
-  $headers .= "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol;
-  $headers .= "Content-Transfer-Encoding: 7bit" . $eol;
-  $headers .= "This is a MIME encoded message." . $eol;
+      // main header (multipart mandatory)
+      $headers = "From: CFX eShop <cfxeshop@gmail.com>" . $eol;
+      $headers .= "MIME-Version: 1.0" . $eol;
+      $headers .= "Content-Type: multipart/mixed; boundary=\"" . $separator . "\"" . $eol;
+      $headers .= "Content-Transfer-Encoding: 7bit" . $eol;
+      $headers .= "This is a MIME encoded message." . $eol;
 
-  // message
-  $body = "--" . $separator . $eol;
-  $body .= "Content-Type: text/plain; charset=\"iso-8859-1\"" . $eol;
-  $body .= "Content-Transfer-Encoding: 8bit" . $eol;
-  $body .= $message . $eol;
+      // message
+      $body = "--" . $separator . $eol;
+      $body .= "Content-Type: text/plain; charset=\"iso-8859-1\"" . $eol;
+      $body .= "Content-Transfer-Encoding: 8bit" . $eol;
+      $body .= $message . $eol;
 
-  // attachment
-  $body .= "--" . $separator . $eol;
-  $body .= "Content-Type: application/octet-stream; name=\"invoice.pdf\"" . $eol;
-  $body .= "Content-Transfer-Encoding: base64" . $eol;
-  $body .= "Content-Disposition: attachment" . $eol;
-  $body .= $content . $eol;
-  $body .= "--" . $separator . "--";
+      // attachment
+      $body .= "--" . $separator . $eol;
+      $body .= "Content-Type: application/octet-stream; name=\"invoice.pdf\"" . $eol;
+      $body .= "Content-Transfer-Encoding: base64" . $eol;
+      $body .= "Content-Disposition: attachment" . $eol;
+      $body .= $content . $eol;
+      $body .= "--" . $separator . "--";
 
-  // SEND Mail
-  if (mail($mailto, $subject, $body, $headers)) {
-    echo "OK";
+      $query = oci_parse($conn, "DELETE FROM CART_PRODUCT WHERE CART_ID = '${cart}'");
+      oci_execute($query);
+
+      // SEND Mail
+      if (mail($mailto, $subject, $body, $headers)) {
+        unlink($file);
+        echo "OK";
+      } else {
+        echo "ERROR!";
+      }
+    } else {
+      header('location:shop.php');
+    }
   } else {
-    echo "ERROR!";
+    header('location:checkout.php');
   }
+} else {
+  header('location:index.php');
 }

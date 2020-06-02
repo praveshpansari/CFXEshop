@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
+	header('location:trader.php');
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,23 +73,18 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">Shop</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown04">
-              <a class="dropdown-item" href="shop.html">Shop</a>
-              <a class="dropdown-item" href="wishlist.html">Wishlist</a>
-              <a class="dropdown-item" href="product-single.html">Single Product</a>
-              <a class="dropdown-item" href="cart.html">Cart</a>
-              <a class="dropdown-item" href="checkout.html">Checkout</a>
-            </div>
-          </li>
-          <li class="nav-item active"><a href="about.html" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
-                class="icon-shopping_cart"></span>[0]</a></li>
-
+        <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="shop.php" class="nav-link">Shop</a></li>
+					<li class="nav-item active"><a href="about.php" class="nav-link">About</a></li>
+					<li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+					<?php
+					if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+						echo '<li class="nav-item"><a href="dashboard.php" class="nav-link">Profile</a></li><li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link">
+						<span class="icon-shopping_cart" id="products-cart"></span>[0]</a></li>
+						<li class="nav-item btn-nav"><a class="nav-link" href="logout.php">LOGOUT</a></li>';
+					} else {
+						echo '<li class="nav-item btn-nav"><a class="nav-link" data-toggle="modal" data-target="#myModal">LOGIN</a></li>';
+					} ?>
         </ul>
       </div>
     </div>
@@ -92,7 +95,7 @@
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 ftco-animate text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>About us</span></p>
+          <p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>About us</span></p>
           <h1 class="mb-0 bread">About us</h1>
         </div>
       </div>

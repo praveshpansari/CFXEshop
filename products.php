@@ -31,15 +31,17 @@ while ($result = oci_fetch_assoc($query)) {
     $name = $result['PRODUCT_NAME'];
     $price = number_format($result['PRICE'], 2);
     $min = $result['MIN_ORDER'];
-    if (isset($_SESSION['loggedin'])) $cart = $_SESSION['cartId'];
     $image = $result['PRODUCT_IMAGE'];
     $prodId = $result['PRODUCT_ID'];
     $discountQuery = oci_parse($conn, "SELECT OFFER FROM SHOP_PRODUCT WHERE PRODUCT_ID = '${prodId}'");
     oci_execute($discountQuery);
     $discount = oci_fetch_assoc($discountQuery)['OFFER'];
-    $inCartQuery = oci_parse($conn, "BEGIN :count := check_cart('${cart}', '${prodId}'); END;");
-    oci_bind_by_name($inCartQuery, ":count", $count);
-    oci_execute($inCartQuery);
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+        $cart = $_SESSION['cartId'];
+        $inCartQuery = oci_parse($conn, "BEGIN :count := check_cart('${cart}', '${prodId}'); END;");
+        oci_bind_by_name($inCartQuery, ":count", $count);
+        oci_execute($inCartQuery);
+    }
     $output .= "<div class='col-md-6 col-lg-3 ftco-animate'>
     <div class='product'>
         <a href='product-single.php?product=" . $prodId . "' class='img-prod'><img class='img-fluid product-pic' src='$image'>

@@ -1,10 +1,9 @@
 AOS.init({
 	duration: 800,
-	easing: 'slide'
+	easing: "slide",
 });
 
 (function ($) {
-
 	"use strict";
 
 	var isMobile = {
@@ -24,10 +23,15 @@ AOS.init({
 			return navigator.userAgent.match(/IEMobile/i);
 		},
 		any: function () {
-			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-		}
+			return (
+				isMobile.Android() ||
+				isMobile.BlackBerry() ||
+				isMobile.iOS() ||
+				isMobile.Opera() ||
+				isMobile.Windows()
+			);
+		},
 	};
-
 
 	$(window).stellar({
 		responsive: true,
@@ -35,25 +39,22 @@ AOS.init({
 		parallaxElements: true,
 		horizontalScrolling: false,
 		hideDistantElements: false,
-		scrollProperty: 'scroll'
+		scrollProperty: "scroll",
 	});
 
-
 	var fullHeight = function () {
-
-		$('.js-fullheight').css('height', $(window).height());
+		$(".js-fullheight").css("height", $(window).height());
 		$(window).resize(function () {
-			$('.js-fullheight').css('height', $(window).height());
+			$(".js-fullheight").css("height", $(window).height());
 		});
-
 	};
 	fullHeight();
 
 	// loader
 	var loader = function () {
 		setTimeout(function () {
-			if ($('#ftco-loader').length > 0) {
-				$('#ftco-loader').removeClass('show');
+			if ($("#ftco-loader").length > 0) {
+				$("#ftco-loader").removeClass("show");
 			}
 		}, 1);
 	};
@@ -63,75 +64,82 @@ AOS.init({
 	$.Scrollax();
 
 	var carousel = function () {
-		$('.home-slider').owlCarousel({
+		$(".home-slider").owlCarousel({
 			loop: true,
 			autoplay: true,
 			margin: 0,
-			animateOut: 'fadeOut',
-			animateIn: 'fadeIn',
+			animateOut: "fadeOut",
+			animateIn: "fadeIn",
 			nav: false,
 			autoplayHoverPause: false,
 			items: 1,
-			navText: ["<span class='ion-md-arrow-back'></span>", "<span class='ion-chevron-right'></span>"],
+			navText: [
+				"<span class='ion-md-arrow-back'></span>",
+				"<span class='ion-chevron-right'></span>",
+			],
 			responsive: {
 				0: {
-					items: 1
+					items: 1,
 				},
 				600: {
-					items: 1
+					items: 1,
 				},
 				1000: {
-					items: 1
-				}
-			}
+					items: 1,
+				},
+			},
 		});
 
-		$('.carousel-testimony').owlCarousel({
+		$(".carousel-testimony").owlCarousel({
 			center: true,
 			loop: true,
 			items: 1,
 			margin: 30,
 			stagePadding: 0,
 			nav: false,
-			navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
+			navText: [
+				'<span class="ion-ios-arrow-back">',
+				'<span class="ion-ios-arrow-forward">',
+			],
 			responsive: {
 				0: {
-					items: 1
+					items: 1,
 				},
 				600: {
-					items: 3
+					items: 3,
 				},
 				1000: {
-					items: 3
-				}
-			}
+					items: 3,
+				},
+			},
 		});
-
 	};
 	carousel();
 
-	$('nav .dropdown').hover(function () {
-		var $this = $(this);
-		// 	 timer;
-		// clearTimeout(timer);
-		$this.addClass('show');
-		$this.find('> a').attr('aria-expanded', true);
-		// $this.find('.dropdown-menu').addClass('animated-fast fadeInUp show');
-		$this.find('.dropdown-menu').addClass('show');
-	}, function () {
-		var $this = $(this);
-		// timer;
-		// timer = setTimeout(function(){
-		$this.removeClass('show');
-		$this.find('> a').attr('aria-expanded', false);
-		// $this.find('.dropdown-menu').removeClass('animated-fast fadeInUp show');
-		$this.find('.dropdown-menu').removeClass('show');
-		// }, 100);
-	});
+	$("nav .dropdown").hover(
+		function () {
+			var $this = $(this);
+			// 	 timer;
+			// clearTimeout(timer);
+			$this.addClass("show");
+			$this.find("> a").attr("aria-expanded", true);
+			// $this.find('.dropdown-menu').addClass('animated-fast fadeInUp show');
+			$this.find(".dropdown-menu").addClass("show");
+		},
+		function () {
+			var $this = $(this);
+			// timer;
+			// timer = setTimeout(function(){
+			$this.removeClass("show");
+			$this.find("> a").attr("aria-expanded", false);
+			// $this.find('.dropdown-menu').removeClass('animated-fast fadeInUp show');
+			$this.find(".dropdown-menu").removeClass("show");
+			// }, 100);
+		}
+	);
 
-
-	$('#dropdown04').on('show.bs.dropdown', function () {
-		console.log('show');
+	$("#dropdown04").on("show.bs.dropdown", function () {
+		console.log("show");
 	});
 
 	// scroll
@@ -139,259 +147,370 @@ AOS.init({
 		$(window).scroll(function () {
 			var $w = $(this),
 				st = $w.scrollTop(),
-				navbar = $('.ftco_navbar'),
-				sd = $('.js-scroll-wrap');
+				navbar = $(".ftco_navbar"),
+				sd = $(".js-scroll-wrap");
 
 			if (st > 150) {
-				if (!navbar.hasClass('scrolled')) {
-					navbar.addClass('scrolled');
+				if (!navbar.hasClass("scrolled")) {
+					navbar.addClass("scrolled");
 				}
 			}
 			if (st < 150) {
-				if (navbar.hasClass('scrolled')) {
-					navbar.removeClass('scrolled sleep');
+				if (navbar.hasClass("scrolled")) {
+					navbar.removeClass("scrolled sleep");
 				}
 			}
 			if (st > 350) {
-				if (!navbar.hasClass('awake')) {
-					navbar.addClass('awake');
+				if (!navbar.hasClass("awake")) {
+					navbar.addClass("awake");
 				}
 
 				if (sd.length > 0) {
-					sd.addClass('sleep');
+					sd.addClass("sleep");
 				}
 			}
 			if (st < 350) {
-				if (navbar.hasClass('awake')) {
-					navbar.removeClass('awake');
-					navbar.addClass('sleep');
+				if (navbar.hasClass("awake")) {
+					navbar.removeClass("awake");
+					navbar.addClass("sleep");
 				}
 				if (sd.length > 0) {
-					sd.removeClass('sleep');
+					sd.removeClass("sleep");
 				}
 			}
 		});
 	};
 	scrollWindow();
 
-
 	var counter = function () {
-
-		$('#section-counter').waypoint(function (direction) {
-
-			if (direction === 'down' && !$(this.element).hasClass('ftco-animated')) {
-
-				var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',')
-				$('.number').each(function () {
-					var $this = $(this),
-						num = $this.data('number');
-					console.log(num);
-					$this.animateNumber(
-						{
-							number: num,
-							numberStep: comma_separator_number_step
-						}, 7000
+		$("#section-counter").waypoint(
+			function (direction) {
+				if (
+					direction === "down" &&
+					!$(this.element).hasClass("ftco-animated")
+				) {
+					var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(
+						","
 					);
-				});
-
-			}
-
-		}, { offset: '95%' });
-
-	}
+					$(".number").each(function () {
+						var $this = $(this),
+							num = $this.data("number");
+						console.log(num);
+						$this.animateNumber(
+							{
+								number: num,
+								numberStep: comma_separator_number_step,
+							},
+							7000
+						);
+					});
+				}
+			},
+			{ offset: "95%" }
+		);
+	};
 	counter();
 
 	var contentWayPoint = function () {
 		var i = 0;
-		$('.ftco-animate').waypoint(function (direction) {
+		$(".ftco-animate").waypoint(
+			function (direction) {
+				if (
+					direction === "down" &&
+					!$(this.element).hasClass("ftco-animated")
+				) {
+					i++;
 
-			if (direction === 'down' && !$(this.element).hasClass('ftco-animated')) {
-
-				i++;
-
-				$(this.element).addClass('item-animate');
-				setTimeout(function () {
-
-					$('body .ftco-animate.item-animate').each(function (k) {
-						var el = $(this);
-						setTimeout(function () {
-							var effect = el.data('animate-effect');
-							if (effect === 'fadeIn') {
-								el.addClass('fadeIn ftco-animated');
-							} else if (effect === 'fadeInLeft') {
-								el.addClass('fadeInLeft ftco-animated');
-							} else if (effect === 'fadeInRight') {
-								el.addClass('fadeInRight ftco-animated');
-							} else {
-								el.addClass('fadeInUp ftco-animated');
-							}
-							el.removeClass('item-animate');
-						}, k * 50, 'easeInOutExpo');
-					});
-
-				}, 100);
-
-			}
-
-		}, { offset: '95%' });
+					$(this.element).addClass("item-animate");
+					setTimeout(function () {
+						$("body .ftco-animate.item-animate").each(function (k) {
+							var el = $(this);
+							setTimeout(
+								function () {
+									var effect = el.data("animate-effect");
+									if (effect === "fadeIn") {
+										el.addClass("fadeIn ftco-animated");
+									} else if (effect === "fadeInLeft") {
+										el.addClass("fadeInLeft ftco-animated");
+									} else if (effect === "fadeInRight") {
+										el.addClass("fadeInRight ftco-animated");
+									} else {
+										el.addClass("fadeInUp ftco-animated");
+									}
+									el.removeClass("item-animate");
+								},
+								k * 50,
+								"easeInOutExpo"
+							);
+						});
+					}, 100);
+				}
+			},
+			{ offset: "95%" }
+		);
 	};
 	contentWayPoint();
 
-
 	// navigation
 	var OnePageNav = function () {
-		$(".smoothscroll[href^='#'], #ftco-nav ul li a[href^='#']").on('click', function (e) {
-			e.preventDefault();
+		$(".smoothscroll[href^='#'], #ftco-nav ul li a[href^='#']").on(
+			"click",
+			function (e) {
+				e.preventDefault();
 
-			var hash = this.hash,
-				navToggler = $('.navbar-toggler');
-			$('html, body').animate({
-				scrollTop: $(hash).offset().top
-			}, 700, 'easeInOutExpo', function () {
-				window.location.hash = hash;
-			});
+				var hash = this.hash,
+					navToggler = $(".navbar-toggler");
+				$("html, body").animate(
+					{
+						scrollTop: $(hash).offset().top,
+					},
+					700,
+					"easeInOutExpo",
+					function () {
+						window.location.hash = hash;
+					}
+				);
 
-
-			if (navToggler.is(':visible')) {
-				navToggler.click();
+				if (navToggler.is(":visible")) {
+					navToggler.click();
+				}
 			}
+		);
+		$("body").on("activate.bs.scrollspy", function () {
+			console.log("nice");
 		});
-		$('body').on('activate.bs.scrollspy', function () {
-			console.log('nice');
-		})
 	};
 	OnePageNav();
 
-
 	// magnific popup
-	$('.image-popup').magnificPopup({
-		type: 'image',
+	$(".image-popup").magnificPopup({
+		type: "image",
 		closeOnContentClick: true,
 		closeBtnInside: false,
 		fixedContentPos: true,
-		mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+		mainClass: "mfp-no-margins mfp-with-zoom", // class to remove default margin from left and right side
 		gallery: {
 			enabled: true,
 			navigateByImgClick: true,
-			preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+			preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
 		},
 		image: {
-			verticalFit: true
+			verticalFit: true,
 		},
 		zoom: {
 			enabled: true,
-			duration: 300 // don't foget to change the duration also in CSS
-		}
+			duration: 300, // don't foget to change the duration also in CSS
+		},
 	});
 
-	$('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+	$(".popup-youtube, .popup-vimeo, .popup-gmaps").magnificPopup({
 		disableOn: 700,
-		type: 'iframe',
-		mainClass: 'mfp-fade',
+		type: "iframe",
+		mainClass: "mfp-fade",
 		removalDelay: 160,
 		preloader: false,
 
-		fixedContentPos: false
+		fixedContentPos: false,
 	});
 
-
-
 	var goHere = function () {
-
-		$('.mouse-icon').on('click', function (event) {
-
+		$(".mouse-icon").on("click", function (event) {
 			event.preventDefault();
 
-			$('html,body').animate({
-				scrollTop: $('.goto-here').offset().top
-			}, 500, 'easeInOutExpo');
+			$("html,body").animate(
+				{
+					scrollTop: $(".goto-here").offset().top,
+				},
+				500,
+				"easeInOutExpo"
+			);
 
 			return false;
 		});
 	};
 	goHere();
 
-
 	function makeTimer() {
-
 		var date = new Date();
-		var endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 3);
-		endTime = (Date.parse(endTime) / 1000);
+		var endTime = new Date(
+			date.getFullYear(),
+			date.getMonth(),
+			date.getDate() + 3
+		);
+		endTime = Date.parse(endTime) / 1000;
 
 		var now = new Date();
-		now = (Date.parse(now) / 1000);
+		now = Date.parse(now) / 1000;
 
 		var timeLeft = endTime - now;
 
 		var days = Math.floor(timeLeft / 86400);
-		var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
-		var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
-		var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+		var hours = Math.floor((timeLeft - days * 86400) / 3600);
+		var minutes = Math.floor((timeLeft - days * 86400 - hours * 3600) / 60);
+		var seconds = Math.floor(
+			timeLeft - days * 86400 - hours * 3600 - minutes * 60
+		);
 
-		if (hours < "10") { hours = "0" + hours; }
-		if (minutes < "10") { minutes = "0" + minutes; }
-		if (seconds < "10") { seconds = "0" + seconds; }
+		if (hours < "10") {
+			hours = "0" + hours;
+		}
+		if (minutes < "10") {
+			minutes = "0" + minutes;
+		}
+		if (seconds < "10") {
+			seconds = "0" + seconds;
+		}
 
 		$("#days").html(days + "<span>Days</span>");
 		$("#hours").html(hours + "<span>Hours</span>");
 		$("#minutes").html(minutes + "<span>Minutes</span>");
 		$("#seconds").html(seconds + "<span>Seconds</span>");
-
 	}
-	setInterval(function () { makeTimer(); }, 1000);
+	setInterval(function () {
+		makeTimer();
+	}, 1000);
 })(jQuery);
 
 function updateAge(val) {
 	$("#ageValue").html(val);
 }
 
-
 $("#editEmail").click(function (event) {
 	event.preventDefault();
-	if ($(this).text() == 'Cancel') {
+	if ($(this).text() == "Cancel") {
 		$("#saveEmail").fadeOut(200);
 		$("#updateEmail").prop("disabled", true);
-		$(this).text('Edit');
+		$(this).text("Edit");
 	} else {
 		$("#updateEmail").prop("disabled", false);
-		$(this).text('Cancel');
+		$(this).text("Cancel");
 		$("#saveEmail").fadeIn(200);
 	}
 });
 
+$("#saveEmail").click(function (e) {
+	e.preventDefault();
+	var id = $("#userId").val();
+	var email = $("#updateEmail").val();
+	$.ajax({
+		url: "update-profile.php",
+		type: "post",
+		data: { id: id, email: email },
+		success: function (response) {
+			$("#upEm").load(window.location.href + " #upEm");
+			$("#saveEmail").fadeOut(200);
+			$("#updateEmail").prop("disabled", true);
+			$("#editEmail").text("Edit");
+			if (response == "format") {
+				$("#errorInf").html(
+					'<div class="toast mb-3 mt-2" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Error!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Invalid Email!</div></div>'
+				);
+				$("#wrong_email").toast("show");
+			} else if (response == "successE") {
+				$("#errorInf").html(
+					'<div class="toast mb-3 mt-2" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Email Updated!</div></div>'
+				);
+				$("#wrong_email").toast("show");
+			}
+		},
+	});
+});
+
 $("#editPassword").click(function (event) {
 	event.preventDefault();
-	if ($(this).text() == 'Cancel') {
+	if ($(this).text() == "Cancel") {
 		$("#savePassword").fadeOut(200);
 		$("#updatePassword").prop("disabled", true);
-		$(this).text('Change Password');
+		$(this).text("Change Password");
 	} else {
 		$("#updatePassword").prop("disabled", false);
-		$(this).text('Cancel');
+		$(this).text("Cancel");
 		$("#savePassword").fadeIn(200);
 	}
 });
 
-$("#ora").on('load', function () {
-	width = $("#ora").width();
-	height = $("#ora").height();
-	tallAndNarrow = width / height < 1;
-	if (tallAndNarrow) {
-		$("#ora").addClass('tallAndNarrow');
-	}
-	$("#ora").addClass('loaded');
-}).each(function () {
-	if (this.complete) $(this).load();
+$("#savePassword").click(function (e) {
+	e.preventDefault();
+	var id = $("#userId").val();
+	var password = $("#updatePassword").val();
+	$.ajax({
+		url: "update-profile.php",
+		type: "post",
+		data: { id: id, password: password },
+		success: function (response) {
+			$("#savePassword").fadeOut(200);
+			$("#updatePassword").prop("disabled", true);
+			$("#editPassword").text("Change Password");
+			if (response == "format") {
+				$("#errorInf").html(
+					'<div class="toast mb-3 mt-2" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Error!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Your Password must be of length 8 and contain at least 1 symbol,1 uppercase letter and 1 number without spaces!</div></div>'
+				);
+				$("#wrong_email").toast("show");
+			} else if (response == "successP") {
+				$("#errorInf").html(
+					'<div class="toast mb-3 mt-2" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Password Updated!</div></div>'
+				);
+				$("#wrong_email").toast("show");
+			}
+			$("#updatePassword").val("");
+		},
+	});
 });
 
+$("#updateProfile").submit(function (e) {
+	e.preventDefault();
+	var id = $("#userId").val();
+	var first = $('#firstName').val();
+	var last = $('#lastName').val();
+	var sex = $('input[name=gender]:checked').val();
+	var phone = $('#phone').val();
+	var age = $('#age').val();
+	var add1 = $('#inputAddress').val();
+	var add2 = $('#inputAddress2').val();
 
-$("#loginForm").on('submit', function () {
+	$.ajax({
+		url: 'update-profile.php',
+		type: 'post',
+		data: { id: id, first: first, last: last, sex: sex, phone: phone, age: age, add1: add1, add2: add2 },
+		success: function (response) {
+
+			if (response == "successI") {
+				$("#personalInfo").load(window.location.href + " #personalInfo");
+				$("#errInd").html('<div class="toast mb-5 mt-n3" data-autohide="false" id="wrong_info"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Information Updated!</div></div>');
+				$("#wrong_info").toast("show");
+			} else if (response == 'format') {
+				$("#errInd").html('<div class="toast mb-5 mt-n3" data-autohide="false" id="wrong_info"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Invalid First Name or Last Name</div></div>');
+				$("#wrong_info").toast("show");
+			}
+
+
+		}
+
+	})
+
+});
+
+$("#ora")
+	.on("load", function () {
+		width = $("#ora").width();
+		height = $("#ora").height();
+		tallAndNarrow = width / height < 1;
+		if (tallAndNarrow) {
+			$("#ora").addClass("tallAndNarrow");
+		}
+		$("#ora").addClass("loaded");
+	})
+	.each(function () {
+		if (this.complete) $(this).load();
+	});
+
+$("#loginForm").on("submit", function () {
 	var emailId = $("#emailId").val();
 	var password = $("#password").val();
 	if (emailId != "" && password != "") {
 		$.ajax({
-			url: 'login.php',
-			type: 'post',
+			url: "login.php",
+			type: "post",
 			data: { emailId: emailId, password: password },
 			beforeSend: function () {
 				$("#registering").html("<img src=images/loader.gif>");
@@ -401,13 +520,13 @@ $("#loginForm").on('submit', function () {
 				if (data.includes("success")) {
 					switch (data) {
 						case "successC":
-							window.location = 'dashboard.php';
+							window.location = "dashboard.php";
 							break;
 						case "successT":
-							window.location = 'trader.php';
+							window.location = "trader.php";
 							break;
 						case "successA":
-							window.location = 'dashboard.php';
+							window.location = "dashboard.php";
 							break;
 					}
 				} else {
@@ -416,18 +535,21 @@ $("#loginForm").on('submit', function () {
 					} else if (data == "fail_pass") {
 						msg = "<span>The password you entered is incorrect!</span>";
 					} else if (data == "not_verified") {
-						msg = "<span>Your account is not verified!<br>Please verify your account using the link sent to your email.</span>";
+						msg =
+							"<span>Your account is not verified!<br>Please verify your account using the link sent to your email.</span>";
 					}
-					$("#registering").html('<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div ><div class="toast-body" style="text-align:left" id="error">' + msg + '</div></div > ');
-					$("#wrong_email").toast('show');
+					$("#registering").html(
+						'<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div ><div class="toast-body" style="text-align:left" id="error">' +
+						msg +
+						"</div></div > "
+					);
+					$("#wrong_email").toast("show");
 				}
-
-			}
+			},
 		});
 	}
 	return false;
 });
-
 
 $("#registerForm").submit(function () {
 	$("#registerBtn").hide();
@@ -439,9 +561,17 @@ $("#registerForm").submit(function () {
 	var age = $("#age").val();
 	var phone = $("#phone").val();
 	$.ajax({
-		url: 'register.php',
-		type: 'post',
-		data: { first_name: first_name, last_name: last_name, phone: phone, registerEmail: registerEmail, registerPassword: registerPassword, username: username, age: age },
+		url: "register.php",
+		type: "post",
+		data: {
+			first_name: first_name,
+			last_name: last_name,
+			phone: phone,
+			registerEmail: registerEmail,
+			registerPassword: registerPassword,
+			username: username,
+			age: age,
+		},
 		beforeSend: function () {
 			$("#registering").html("<img src=images/loader.gif>");
 		},
@@ -449,19 +579,23 @@ $("#registerForm").submit(function () {
 			var msg = "";
 			switch (data) {
 				case "success":
-					msg = "<span>Account registered. Please check your email for an activation link to your account.</span>";
+					msg =
+						"<span>Account registered. Please check your email for an activation link to your account.</span>";
 					break;
 
 				case "email_exists":
-					msg = "<span>An account with this email address already exists!</span>";
+					msg =
+						"<span>An account with this email address already exists!</span>";
 					break;
 
 				case "password":
-					msg = "<span>Your Password must be of length 8 and contain at least 1 symbol,1 uppercase letter and 1 number without spaces!</span>";
+					msg =
+						"<span>Your Password must be of length 8 and contain at least 1 symbol,1 uppercase letter and 1 number without spaces!</span>";
 					break;
 
 				case "username":
-					msg = "<span>Your username must be of min. length 6 and can only contain lowercase letters ,numbers & underscores!</span>";
+					msg =
+						"<span>Your username must be of min. length 6 and can only contain lowercase letters ,numbers & underscores!</span>";
 					break;
 
 				case "username_exists":
@@ -480,78 +614,80 @@ $("#registerForm").submit(function () {
 					msg = "<span>Last Name must contain letters only!</span>";
 					break;
 			}
-			$("#registering").html('<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div ><div class="toast-body" style="text-align:left" id="error">' + msg + '</div></div > ');
-			$("#wrong_email").toast('show');
+			$("#registering").html(
+				'<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div ><div class="toast-body" style="text-align:left" id="error">' +
+				msg +
+				"</div></div > "
+			);
+			$("#wrong_email").toast("show");
 			$("#registerBtn").show();
-		}
+		},
 	});
 	return false;
 });
 
-$('#phone').keyup(function () {
-	$(this).val($(this).val().replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, '$1-$2-$3'))
+$("#phone").keyup(function () {
+	$(this).val(
+		$(this)
+			.val()
+			.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, "$1-$2-$3")
+	);
 });
 
-$('a[data-toggle="tab"]').on('show.bs.tab', function () {
-	$("#wrong_email").toast('hide');
+$('a[data-toggle="tab"]').on("show.bs.tab", function () {
+	$("#wrong_email").toast("hide");
 });
 
 $(document).ready(function () {
+	if (!localStorage.getItem("collapseItem"))
+		localStorage.setItem("collapseItem", "#" + $("#profileUpdate").attr("id"));
 
-	if (!localStorage.getItem('collapseItem'))
-		localStorage.setItem('collapseItem', '#' + $('#profileUpdate').attr('id'));
-
-
-	$('#profileUpdate').on('shown.bs.collapse', function () {
-		localStorage.setItem('collapseItem', '#' + $(this).attr('id'));
-		var collapseItem = localStorage.getItem('collapseItem');
-		$('.btn-accord').removeClass('active');
-		$(collapseItem + 'Btn').addClass('active');
+	$("#profileUpdate").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
 	});
 
-	$('#shopManage').on('shown.bs.collapse', function () {
-		localStorage.setItem('collapseItem', '#' + $(this).attr('id'));
-		var collapseItem = localStorage.getItem('collapseItem');
-		$('.btn-accord').removeClass('active');
-		$(collapseItem + 'Btn').addClass('active');
+	$("#shopManage").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
 	});
 
-	$('#addProduct').on('shown.bs.collapse', function () {
-		localStorage.setItem('collapseItem', '#' + $(this).attr('id'));
-		var collapseItem = localStorage.getItem('collapseItem');
-		$('.btn-accord').removeClass('active');
-		$(collapseItem + 'Btn').addClass('active');
+	$("#addProduct").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
 	});
 
-	$('#manageProduct').on('shown.bs.collapse', function () {
-		localStorage.setItem('collapseItem', '#' + $(this).attr('id'));
-		var collapseItem = localStorage.getItem('collapseItem');
-		$('.btn-accord').removeClass('active');
-		$(collapseItem + 'Btn').addClass('active');
+	$("#manageProduct").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
 	});
 
-	var collapseItem = localStorage.getItem('collapseItem');
-	$(collapseItem).collapse('show');
+	var collapseItem = localStorage.getItem("collapseItem");
+	$(collapseItem).collapse("show");
 });
 
-
-
 $(document).ready(function () {
-
-	if ($('body.dashboard').length > 0) {
-
-		if ($('#image_upload').hasClass("trader")) {
+	if ($("body.dashboard").length > 0) {
+		if ($("#image_upload").hasClass("trader")) {
 			$image_crop = $("#img-demo").croppie({
 				enableExif: true,
 				viewport: {
 					width: 200,
 					height: 200,
-					type: 'square'
+					type: "square",
 				},
 				boundary: {
 					width: 300,
-					height: 300
-				}
+					height: 300,
+				},
 			});
 		} else {
 			$image_crop = $("#img-demo").croppie({
@@ -559,98 +695,102 @@ $(document).ready(function () {
 				viewport: {
 					width: 200,
 					height: 200,
-					type: 'circle'
+					type: "circle",
 				},
 				boundary: {
 					width: 300,
-					height: 300
-				}
+					height: 300,
+				},
 			});
 		}
 
-		$product_img = $('#product-img-demo').croppie({
+		$product_img = $("#product-img-demo").croppie({
 			enableExif: true,
 			viewport: {
 				width: 250,
 				height: 200,
-				type: 'square'
+				type: "square",
 			},
 			boundary: {
 				width: 300,
-				height: 300
-			}
-
+				height: 300,
+			},
 		});
 
-		$('#product-image').on('change', function () {
+		$("#product-image").on("change", function () {
 			var reader = new FileReader();
 			reader.onload = function (event) {
-				$product_img.croppie('bind', {
-					url: event.target.result
-				}).then(function () {
-					console.log('jquery bin complete product');
-				});
-			}
+				$product_img
+					.croppie("bind", {
+						url: event.target.result,
+					})
+					.then(function () {
+						console.log("jquery bin complete product");
+					});
+			};
 			reader.readAsDataURL(this.files[0]);
-			$("#uploadProductModal").modal('show');
+			$("#uploadProductModal").modal("show");
 		});
 
-
-		$('#cropProduct').click(function (event) {
-			$product_img.croppie('result', {
-				type: 'canvas',
-				size: 'viewport',
-			}).then(function (response) {
-				$.ajax({
-					url: "upload.php",
-					type: "POST",
-					data: { "product-image": response },
-					success: function (data) {
-						$('#uploadProductModal').modal('hide');
-						$('.product-pic').attr('src', data);
-					}
+		$("#cropProduct").click(function (event) {
+			$product_img
+				.croppie("result", {
+					type: "canvas",
+					size: "viewport",
+				})
+				.then(function (response) {
+					$.ajax({
+						url: "upload.php",
+						type: "POST",
+						data: { "product-image": response },
+						success: function (data) {
+							$("#uploadProductModal").modal("hide");
+							$(".product-pic").attr("src", data);
+						},
+					});
 				});
-			})
 		});
 
-		$('#image_upload').on('change', function () {
+		$("#image_upload").on("change", function () {
 			var reader = new FileReader();
 			reader.onload = function (event) {
-				$image_crop.croppie('bind', {
-					url: event.target.result
-				}).then(function () {
-					console.log('jquery bind complete');
-				});
-			}
+				$image_crop
+					.croppie("bind", {
+						url: event.target.result,
+					})
+					.then(function () {
+						console.log("jquery bind complete");
+					});
+			};
 			reader.readAsDataURL(this.files[0]);
-			$("#uploadImageModal").modal('show');
+			$("#uploadImageModal").modal("show");
 		});
-		$('#crop').click(function (event) {
-			$image_crop.croppie('result', {
-				type: 'canvas',
-				size: 'viewport'
-			}).then(function (response) {
-				$.ajax({
-					url: "upload.php",
-					type: "POST",
-					data: { "image_upload": response },
-					success: function (data) {
-						$('#uploadImageModal').modal('hide');
-						$('.profilepic').attr('src', data);
-					}
+		$("#crop").click(function (event) {
+			$image_crop
+				.croppie("result", {
+					type: "canvas",
+					size: "viewport",
+				})
+				.then(function (response) {
+					$.ajax({
+						url: "upload.php",
+						type: "POST",
+						data: { image_upload: response },
+						success: function (data) {
+							$("#uploadImageModal").modal("hide");
+							$(".profilepic").attr("src", data);
+						},
+					});
 				});
-			})
 		});
 	}
 });
 
-
-
 // the current open accordion will not be able to close itself
-$('[data-toggle="collapse"]').on('click', function (e) {
-	if ($(this).parents('.accordion').find('.collapse.show')) {
+$('[data-toggle="collapse"]').on("click", function (e) {
+	if ($(this).parents(".accordion").find(".collapse.show")) {
 		var idx = $(this).index('[data-toggle="collapse"]');
-		if (idx == $('.collapse.show').index('.collapse')) {
+		if (idx == $(".collapse.show").index(".collapse")) {
 			e.stopPropagation();
 		}
 	}
@@ -658,94 +798,87 @@ $('[data-toggle="collapse"]').on('click', function (e) {
 
 //pagination
 $(document).ready(function () {
-
-	if (!localStorage.getItem('pageNum'))
-		load_data(1);
-	else
-		load_data(localStorage.getItem('pageNum'));
+	if (!localStorage.getItem("pageNum")) load_data(1);
+	else load_data(localStorage.getItem("pageNum"));
 
 	function load_data(page) {
 		$.ajax({
-			url: 'products.php',
-			method: 'GET',
+			url: "products.php",
+			method: "GET",
 			data: { page: page },
 			success: function (data) {
-				$('#products').html(data);
-			}
-		})
+				$("#products").html(data);
+			},
+		});
 	}
 
-	$(document).on('click', '.pag_link', function () {
-		page = $(this).children('a').attr("id");
-		localStorage.setItem('pageNum', page);
+	$(document).on("click", ".pag_link", function () {
+		page = $(this).children("a").attr("id");
+		localStorage.setItem("pageNum", page);
 		load_data(page);
 	});
 
-	$(document).on('click', '.buy-now', function () {
-		var pid = $(this).attr('id');
-		var min = $('#min-quantity').val();
+	$(document).on("click", ".buy-now", function () {
+		var pid = $(this).attr("id");
+		var min = $("#min-quantity").val();
 		var now = $(this);
 		$.ajax({
-			url: 'cart.php',
-			method: 'get',
+			url: "cart.php",
+			method: "get",
 			data: { add: 1, pid: pid, min: min },
 			success: function (data) {
-				if (data != "not") {
-					window.location = 'cart.php';
+				if (data != "Page not found") {
+					window.location = "cart.php";
+				} else {
+					$("#myModal").modal("show");
 				}
-			}
+			},
 		});
 	});
 });
 
-$(document).on('click', '.product-remove', function () {
-	var pid = $(this).attr('id');
+$(document).on("click", ".product-remove", function () {
+	var pid = $(this).attr("id");
 	$.ajax({
-		url: 'remove-cart.php',
-		method: 'get',
+		url: "remove-cart.php",
+		method: "get",
 		data: { pid: pid, rem: 1 },
 		success: function (data) {
-			if (data == 'done')
+			if (data == "done")
 				$(".ftco-cart").load(window.location.href + " .ftco-cart");
-		}
-	})
+		},
+	});
 });
 
-
-
 $(document).ready(function () {
-
 	load_data(1);
 
 	function load_data(page, sort) {
 		$.ajax({
-			url: 'edit-product.php',
-			method: 'GET',
+			url: "edit-product.php",
+			method: "GET",
 			data: { view: 1, page: page, sort: sort },
 			success: function (data) {
-				if (data == 'no') {
-					$('#manageProductPara').html("NO PRODUCT FOUNDS");
+				if (data == "no") {
+					$("#manageProductPara").html("NO PRODUCT FOUNDS");
 				} else {
-					$('#manageProductPara').html(data);
+					$("#manageProductPara").html(data);
 				}
-			}
+			},
 		});
 	}
 
-	$(document).on('click', '.page-link-bs', function () {
-		var page = $(this).attr('id');
-		if ($(this).hasClass('prev'))
-			page--;
-
-		else if ($(this).hasClass('next'))
-			page++;
+	$(document).on("click", ".page-link-bs", function () {
+		var page = $(this).attr("id");
+		if ($(this).hasClass("prev")) page--;
+		else if ($(this).hasClass("next")) page++;
 
 		load_data(page);
 	});
 
 	var order = "aesc";
-	$(document).on('click', '#sort-price', function () {
-		var page = $('.pagination-bs').attr('id');
+	$(document).on("click", "#sort-price", function () {
+		var page = $(".pagination-bs").attr("id");
 		if (order == "aesc") {
 			load_data(page, "PRICE ASC");
 			order = "desc";
@@ -756,198 +889,212 @@ $(document).ready(function () {
 	});
 
 	function edit_product(pid) {
-		var page = $('.pagination-bs').attr('id');
+		var page = $(".pagination-bs").attr("id");
 		$.ajax({
-			url: 'edit-product.php',
-			method: 'GET',
+			url: "edit-product.php",
+			method: "GET",
 			data: { edit: 1, pid: pid, page: page },
 			success: function (data) {
-				if (data == 'no') {
-					$('#manageProductPara').html("NO PRODUCT FOUNDS");
+				if (data == "no") {
+					$("#manageProductPara").html("NO PRODUCT FOUNDS");
 				} else {
-					$('#manageProductPara').html(data);
+					$("#manageProductPara").html(data);
 				}
-			}
+			},
 		});
 	}
 
-	$(document).on('click', '.edit-product', function () {
-		var pid = $(this).attr('id');
+	$(document).on("click", ".edit-product", function () {
+		var pid = $(this).attr("id");
 		edit_product(pid);
-	})
+	});
 
-	$(document).on('submit', '#editProduct', function (e) {
+	$(document).on("submit", "#editProduct", function (e) {
 		e.preventDefault();
 
-		var pid = $('#pid').val();
-		var pname = $('#product-name-edit').val();
-		var price = parseFloat($('#product-price-edit').val())
-		var quantity = parseInt($('#quanPerItem-edit').val()) + ' ' + $('#unit-edit').val();
-		var allergy = $('#allergy-edit').val();
-		var min = parseInt($('#min-order-edit').val());
-		var max = parseInt($('#max-order-edit').val());
-		var stock = parseInt($('#stock-amount-edit').val());
-		var description = $('textarea#description-edit').val();
-		var pimg = $('.product-pic-edit').attr('src');
+		var pid = $("#pid").val();
+		var pname = $("#product-name-edit").val();
+		var price = parseFloat($("#product-price-edit").val());
+		var quantity =
+			parseInt($("#quanPerItem-edit").val()) + " " + $("#unit-edit").val();
+		var allergy = $("#allergy-edit").val();
+		var min = parseInt($("#min-order-edit").val());
+		var max = parseInt($("#max-order-edit").val());
+		var stock = parseInt($("#stock-amount-edit").val());
+		var description = $("textarea#description-edit").val();
+		var pimg = $(".product-pic-edit").attr("src");
 
 		$.ajax({
-			url: 'edit-Product.php',
-			method: 'GET',
-			data: { pid: pid, pname: pname, price: price, quantity: quantity, allergy: allergy, min: min, max: max, stock: stock, description: description, pimg: pimg },
+			url: "edit-Product.php",
+			method: "GET",
+			data: {
+				pid: pid,
+				pname: pname,
+				price: price,
+				quantity: quantity,
+				allergy: allergy,
+				min: min,
+				max: max,
+				stock: stock,
+				description: description,
+				pimg: pimg,
+			},
 			success: function (response) {
 				if (response == "okay") {
-					$('#errorInfo-edit').html('<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>');
-					$('#wrong_email').toast('show');
+					$("#errorInfo-edit").html(
+						'<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>'
+					);
+					$("#wrong_email").toast("show");
 				}
-			}
+			},
 		});
 	});
 
-	$(document).on('click', '.backBtn', function () {
-		var page = $('.withPage').attr('id');
+	$(document).on("click", ".backBtn", function () {
+		var page = $(".withPage").attr("id");
 		load_data(page);
 	});
 
-	$(document).on('click', '#deleteBtn', function () {
-		var pid = $('#pid').val();
-		var page = $('.withPage').attr('id');
-		var pimg = $('.product-pic-edit').attr('src');
+	$(document).on("click", "#deleteBtn", function () {
+		var pid = $("#pid").val();
+		var page = $(".withPage").attr("id");
+		var pimg = $(".product-pic-edit").attr("src");
 		$.ajax({
-			url: 'edit-product.php',
-			method: 'GET',
+			url: "edit-product.php",
+			method: "GET",
 			data: { delete: 1, pid: pid, pimg: pimg },
 			success: function (response) {
 				if (response == "deleted") {
 					load_data(page);
-					$('#errorInfo-edit').html('<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>');
-					$('#wrong_email').toast('show');
+					$("#errorInfo-edit").html(
+						'<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>'
+					);
+					$("#wrong_email").toast("show");
 				}
-			}
+			},
 		});
-
-
 	});
-
-
 });
-
-
-
-
 
 $(document).ready(function () {
-
-	$('.quantity-right-plus').mousedown(function (e) {
-
+	$(".quantity-right-plus").mousedown(function (e) {
 		// Stop acting like a button
 		e.preventDefault();
 
 		// Get the field name
-		var quantity = parseInt($('#quantity').val());
+		var quantity = parseInt($("#quantity").val());
 		timeout = setInterval(function () {
-			if (quantity + 1 <= $('#quantity').attr('max'))
-				$('#quantity').val(++quantity);
-		}, 500);
-
-	});
-
-	$('.quantity-right-plus').click(function (e) {
-
-		// Stop acting like a button
-		e.preventDefault();
-
-		// Get the field name
-		var quantity = parseInt($('#quantity').val());
-
-		if (quantity + 1 <= $('#quantity').attr('max'))
-			$('#quantity').val(++quantity);
-	});
-
-	$('.quantity-left-minus').mousedown(function (e) {
-		// Stop acting like a button
-		e.preventDefault();
-		// Get the field name
-		var quantity = parseInt($('#quantity').val());
-		timeout = setInterval(function () {
-			if (quantity - 1 >= $('#quantity').attr('min'))
-				$('#quantity').val(--quantity);
+			if (quantity + 1 <= $("#quantity").attr("max"))
+				$("#quantity").val(++quantity);
 		}, 500);
 	});
 
-	$('.quantity-left-minus').click(function (e) {
-
+	$(".quantity-right-plus").click(function (e) {
 		// Stop acting like a button
 		e.preventDefault();
 
 		// Get the field name
-		var quantity = parseInt($('#quantity').val());
+		var quantity = parseInt($("#quantity").val());
 
-		if (quantity - 1 >= $('#quantity').attr('min'))
-			$('#quantity').val(--quantity);
+		if (quantity + 1 <= $("#quantity").attr("max"))
+			$("#quantity").val(++quantity);
 	});
 
+	$(".quantity-left-minus").mousedown(function (e) {
+		// Stop acting like a button
+		e.preventDefault();
+		// Get the field name
+		var quantity = parseInt($("#quantity").val());
+		timeout = setInterval(function () {
+			if (quantity - 1 >= $("#quantity").attr("min"))
+				$("#quantity").val(--quantity);
+		}, 500);
+	});
 
-	$('.btn-number').mouseup(function () {
+	$(".quantity-left-minus").click(function (e) {
+		// Stop acting like a button
+		e.preventDefault();
+
+		// Get the field name
+		var quantity = parseInt($("#quantity").val());
+
+		if (quantity - 1 >= $("#quantity").attr("min"))
+			$("#quantity").val(--quantity);
+	});
+
+	$(".btn-number").mouseup(function () {
 		clearInterval(timeout);
 		return false;
 	});
 
-	$('.btn-number').mouseout(function () {
+	$(".btn-number").mouseout(function () {
 		clearInterval(timeout);
 		return false;
 	});
-
 });
 
-$('#resetBtn').click(function () {
-	$('.product-pic').attr('src', "images/product-demo.png");
+$("#resetBtn").click(function () {
+	$(".product-pic").attr("src", "images/product-demo.png");
 });
 
-$('#addProduct').submit(function (e) {
+$("#addProduct").submit(function (e) {
 	e.preventDefault();
-	if (!$('#shop-id').val()) {
-		$('#errorInfo').html('<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Please select the shop.</div></div>');
-		$('#wrong_email').toast('show');
-	} else if (!$('#unit').val()) {
-		$('#errorInfo').html('<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Please select the quantity unit.</div></div>');
-		$('#wrong_email').toast('show');
+	if (!$("#shop-id").val()) {
+		$("#errorInfo").html(
+			'<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Please select the shop.</div></div>'
+		);
+		$("#wrong_email").toast("show");
+	} else if (!$("#unit").val()) {
+		$("#errorInfo").html(
+			'<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Please select the quantity unit.</div></div>'
+		);
+		$("#wrong_email").toast("show");
 	} else {
-		var pname = $('#product-name').val();
-		var price = parseFloat($('#product-price').val())
-		var pshop = $('#shop-id').val();
-		var quantity = parseInt($('#quanPerItem').val()) + ' ' + $('#unit').val();
-		var allergy = $('#allergy').val();
-		var min = parseInt($('#min-order').val());
-		var max = parseInt($('#max-order').val());
-		var stock = parseInt($('#stock-amount').val());
-		var description = $('textarea#description').val();
-		var pimg = $('.product-pic').attr('src');
-
+		var pname = $("#product-name").val();
+		var price = parseFloat($("#product-price").val());
+		var pshop = $("#shop-id").val();
+		var quantity = parseInt($("#quanPerItem").val()) + " " + $("#unit").val();
+		var allergy = $("#allergy").val();
+		var min = parseInt($("#min-order").val());
+		var max = parseInt($("#max-order").val());
+		var stock = parseInt($("#stock-amount").val());
+		var description = $("textarea#description").val();
+		var pimg = $(".product-pic").attr("src");
 
 		$.ajax({
-			url: 'addProduct.php',
-			method: 'GET',
-			data: { pname: pname, price: price, pshop: pshop, quantity: quantity, allergy: allergy, min: min, max: max, stock: stock, description: description, pimg: pimg },
+			url: "addProduct.php",
+			method: "GET",
+			data: {
+				pname: pname,
+				price: price,
+				pshop: pshop,
+				quantity: quantity,
+				allergy: allergy,
+				min: min,
+				max: max,
+				stock: stock,
+				description: description,
+				pimg: pimg,
+			},
 			success: function (response) {
 				var msg = response;
 				if (msg == "all") {
-					$('#errorInfo').html('<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Please select all fields.</div></div>');
-					$('#wrong_email').toast('show');
+					$("#errorInfo").html(
+						'<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Please select all fields.</div></div>'
+					);
+					$("#wrong_email").toast("show");
+				} else if (msg == "exist") {
+					$("#errorInfo").html(
+						'<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Product already exists in this shop.</div></div>'
+					);
+					$("#wrong_email").toast("show");
+				} else {
+					$("#errorInfo").html(
+						'<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Inserted Product</div></div>'
+					);
+					$("#wrong_email").toast("show");
 				}
-				else if (msg == "exist") {
-					$('#errorInfo').html('<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Product already exists in this shop.</div></div>');
-					$('#wrong_email').toast('show');
-				}
-
-				else {
-					$('#errorInfo').html('<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Inserted Product</div></div>');
-					$('#wrong_email').toast('show');
-				}
-			}
+			},
 		});
 	}
-
-
 });
-
-
