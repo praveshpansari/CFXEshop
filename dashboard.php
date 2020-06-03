@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+include 'connection.php';
 session_start();
 if (isset($_SESSION['loggedin'])) {
     if ($_SESSION['loggedin']) {
@@ -115,7 +116,7 @@ if (isset($_SESSION['loggedin'])) {
     <!-- END nav -->
     <section class="ftco-section profile bg-light">
         <div class="container">
-            <div class="row">
+            <div class="row accordion" id="accordian">
                 <div class="col-lg-4 mb-3">
                     <div class="card">
                         <div class="row no-gutters">
@@ -134,22 +135,19 @@ if (isset($_SESSION['loggedin'])) {
                     </div>
                     <div class="card mt-4">
                         <div class="row no-gutters">
-                            <div class="col-md-4 d-flex align-items-center justify-content-center" style="padding-top:3%;padding-bottom:3%">
-                                <div class="circle">
-                                    <img src="images/image_6.jpg" id="ora">
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h6 class="card-title">Hello! <?php echo $_SESSION["user"]; ?></h6>
-                                    <h5 class="card-text"><?php echo $_SESSION["first"] . " " . $_SESSION["last"]; ?></h5>
-                                </div>
+                            <div class="card-body">
+                                <button class="btn-accord btn-block " id="profileUpdateBtn" type="button" data-toggle="collapse" data-target="#profileUpdate" aria-controls="profileUpdate">
+                                    Update Profile
+                                </button>
+                                <button class="btn-accord btn-block" id="orderManageBtn" type="button" data-toggle="collapse" data-target="#orderManage" aria-controls="orderManage">
+                                    Manage Orders
+                                </button>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-8 collapse" id="profileUpdate" data-parent="#accordian">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Update Profile</h5>
@@ -191,9 +189,9 @@ if (isset($_SESSION['loggedin'])) {
                                     <hr>
                                     <br>
                                     <div id="errInd">
-                                        </div>
+                                    </div>
                                     <div id="personalInfo">
-                                        
+
                                         <fieldset class="personalInfo">
 
                                             <h6>Personal Information</h6>
@@ -253,6 +251,64 @@ if (isset($_SESSION['loggedin'])) {
 
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 collapse" id="orderManage" data-parent="#accordian">
+                    <div class="card pb-5">
+                        <div class="card-body">
+                            <h5 class="card-title mb-n1">Your Orders</h5>
+                            <p class="card-text">
+                                <h6 class="mt-5 mb-4">Order Information</h6>
+
+                                <?php
+                                $userId = $_SESSION['id'];
+                                $query = oci_parse($conn, "SELECT count(*) NUM FROM ORDERS WHERE CUSTOMER_ID = '${userId}'");
+                                $result = [1][0];
+                                oci_execute($query);
+                                if (oci_fetch_assoc($query)['NUM'] != 0) {
+                                    $query = oci_parse($conn, "SELECT DISTINCT INVOICE_NO,PAYMENT_DATE,SUM(SELL_PRICE) price FROM ORDERS NATURAL JOIN INVOICE WHERE CUSTOMER_ID = '${userId}' GROUP BY INVOICE_NO,PAYMENT_DATE");
+                                    oci_execute($query); ?>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col" style="width:18%">Order Date</th>
+                                                    <th scope="col">Invoice No</th>
+                                                    <th scope="col">Products</th>
+                                                    <th scope="col">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+
+                                                while ($result = oci_fetch_assoc($query)) {
+                                                    $i = $result['INVOICE_NO'];
+                                                ?>
+                                                    <tr>
+                                                        <th scope="row"><?= $result['PAYMENT_DATE'] ?></th>
+                                                        <td><?= $i ?></td>
+                                                        <td>
+                                                            <?php
+                                                            $q = oci_parse($conn, "SELECT PRODUCT_NAME,ORDERS.QUANTITY FROM ORDERS LEFT JOIN PRODUCT ON ORDERS.PRODUCT_ID = PRODUCT.PRODUCT_ID WHERE INVOICE_NO = '${i}'");
+                                                            oci_execute($q);
+                                                            while ($r = oci_fetch_assoc($q)) {
+                                                                echo "[" . $r['PRODUCT_NAME'] . " x " . $r['QUANTITY'] . "]&nbsp;<br>";
+                                                            }
+                                                            ?></td>
+                                                        <td>$<?= $result['PRICE'] ?></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <?php } else {
+                                    echo "You have not ordered anything.";
+                                }
+                                ?>
                             </p>
                         </div>
                     </div>

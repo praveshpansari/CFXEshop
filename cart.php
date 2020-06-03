@@ -3,7 +3,7 @@ include 'connection.php';
 session_start();
 
 if (isset($_SESSION['loggedin'])) {
-	if ($_SESSION['type'] == 'trader') 
+	if ($_SESSION['type'] == 'trader')
 		header('location:trader.php');
 	else if (isset($_GET['add']) && isset($_GET['pid']) && isset($_GET['min'])) {
 		$cart = $_SESSION['cartId'];
@@ -133,7 +133,7 @@ if (isset($_SESSION['loggedin'])) {
 											while ($result = oci_fetch_assoc($query)) {
 											?>
 												<tr class="text-center">
-													<td class="product-remove" id="<?= $result['PRODUCT_ID'] ?>"><a style="cursor: pointer;font-size:1.5rem"><span class="ion-ios-close"></span></a></td>
+													<td class="product-remove"><a class="remove-icon" id="<?= $result['PRODUCT_ID'] ?>" style="cursor: pointer;font-size:1.5rem"><span class="ion-ios-close"></span></a></td>
 
 													<td class="image-prod">
 														<div class="img" style="background-image:url(<?= $result['PRODUCT_IMAGE'] ?>);"></div>
@@ -148,11 +148,14 @@ if (isset($_SESSION['loggedin'])) {
 
 													<td class="quantity">
 														<div class="input-group mb-3">
-															<input type="number" name="quantity" class="quantity form-control input-number" value="<?= $result['ITEM_QUANTITY'] ?>" min="<?= $result['MIN_ORDER'] ?>" max="<?= $result['MAX_ORDER'] ?>">
+															<input type="number" id="<?= $result['PRODUCT_ID'] ?>" name="quantity" class="quantity form-control input-number" value="<?= $result['ITEM_QUANTITY'] ?>" min="<?= $result['MIN_ORDER'] ?>" max="<?= $result['MAX_ORDER'] ?>">
 														</div>
 													</td>
 
-													<td class="total">$<?= number_format($result['TOTAL'], 2) ?></td>
+													<td class="total">
+														<div class="upP" id="<?= $result['PRODUCT_ID'] ?>">$<?= number_format($result['TOTAL'], 2) ?></div>
+													</td>
+
 												</tr>
 											<?php } ?>
 										</tbody>
@@ -165,25 +168,27 @@ if (isset($_SESSION['loggedin'])) {
 							<div class="col-lg-6 mt-5 cart-wrap ftco-animate">
 								<div class="cart-total mb-3">
 									<h3>Cart Totals</h3>
-									<?php
-									$query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
-									oci_execute($query);
-									$result = oci_fetch_assoc($query);
-									$discount = $result['AMOUNT'] * $result['DISCOUNT'] / 100;
-									?>
-									<p class="d-flex">
-										<span>Subtotal</span>
-										<span>$<?= number_format($result['AMOUNT'], 2); ?></span>
-									</p>
-									<p class="d-flex">
-										<span>Discount</span>
-										<span>$<?= number_format($discount, 2) ?></span>
-									</p>
-									<hr>
-									<p class="d-flex total-price">
-										<span>Total</span>
-										<span>$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
-									</p>
+									<div id="amount">
+										<?php
+										$query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
+										oci_execute($query);
+										$result = oci_fetch_assoc($query);
+										$discount = $result['AMOUNT'] * $result['DISCOUNT'] / 100;
+										?>
+										<p class="d-flex">
+											<span>Subtotal</span>
+											<span>$<?= number_format($result['AMOUNT'], 2); ?></span>
+										</p>
+										<p class="d-flex">
+											<span>Discount</span>
+											<span>$<?= number_format($discount, 2) ?></span>
+										</p>
+										<hr>
+										<p class="d-flex total-price">
+											<span>Total</span>
+											<span>$<?= number_format($result['NET_AMOUNT'], 2) ?></span>
+										</p>
+									</div>
 								</div>
 								<p><a href="checkout.php" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
 							</div>
@@ -294,7 +299,7 @@ if (isset($_SESSION['loggedin'])) {
 					<circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
 					<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
-			
+
 			</script>
 			<script src="js/jquery.min.js"></script>
 			<script src="js/jquery-migrate-3.0.1.min.js"></script>
@@ -314,7 +319,7 @@ if (isset($_SESSION['loggedin'])) {
 			<script src="js/main.js"></script>
 
 
-			
+
 		</body>
 
 		</html>

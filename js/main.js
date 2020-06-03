@@ -684,6 +684,13 @@ $(document).ready(function () {
 		$(collapseItem + "Btn").addClass("active");
 	});
 
+	$("#orderManage").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
+	});
+
 	$("#addProduct").on("shown.bs.collapse", function () {
 		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
 		var collapseItem = localStorage.getItem("collapseItem");
@@ -824,16 +831,25 @@ $('[data-toggle="collapse"]').on("click", function (e) {
 	}
 });
 
+
 //pagination
 $(document).ready(function () {
-	if (!localStorage.getItem("pageNum")) load_data(1);
-	else load_data(localStorage.getItem("pageNum"));
 
-	function load_data(page) {
+	if (!localStorage.getItem("filter")) localStorage.setItem("filter", 0);
+
+	$('.filter-cat#' + localStorage.getItem("filter")).addClass('active');
+
+	if (!localStorage.getItem("pageNum")) {
+		localStorage.setItem("pageNum", 1);
+		load_data(1, localStorage.getItem("filter"));
+	}
+	else load_data(localStorage.getItem("pageNum"), localStorage.getItem("filter"));
+
+	function load_data(page, filter) {
 		$.ajax({
 			url: "products.php",
 			method: "GET",
-			data: { page: page },
+			data: { page: page, filter: filter },
 			success: function (data) {
 				$("#products").html(data);
 			},
@@ -843,7 +859,28 @@ $(document).ready(function () {
 	$(document).on("click", ".pag_link", function () {
 		page = $(this).children("a").attr("id");
 		localStorage.setItem("pageNum", page);
-		load_data(page);
+		load_data(page, localStorage.getItem("filter"));
+	});
+
+	$('.filter-cat').click(function (e) {
+		e.preventDefault();
+		var filter = $(this).attr('id');
+		$('.filter-cat').removeClass('active');
+		$(this).addClass('active');
+		localStorage.setItem("filter", filter);
+		localStorage.setItem("pageNum", 1);
+		load_data(1, filter);
+	})
+
+	$('.shop-cat').click(function (e) {
+		e.preventDefault();
+		window.location = 'shop.php';
+		var filter = $(this).attr('id');
+		$('.filter-cat').removeClass('active');
+		$(this).addClass('active');
+		localStorage.setItem("filter", filter);
+		localStorage.setItem("pageNum", 1);
+		load_data(1, filter);
 	});
 
 	$(document).on("click", ".buy-now", function () {
@@ -856,24 +893,58 @@ $(document).ready(function () {
 			data: { add: 1, pid: pid, min: min },
 			success: function (data) {
 				if (data != "Page not found") {
-					window.location = "cart.php";
+					load_data(localStorage.getItem("pageNum"), localStorage.getItem("filter"));
 				} else {
 					$("#myModal").modal("show");
 				}
 			},
 		});
 	});
+
+	$(document).on("click", ".heart", function () {
+		var pid = $(this).attr("id");
+		$.ajax({
+			url: "favorite.php",
+			method: "get",
+			data: { fav: 1, pid: pid },
+			success: function (data) {
+				if (data != "Page not found") {
+					load_data(localStorage.getItem("pageNum"), localStorage.getItem("filter"));
+				} else {
+					$("#myModal").modal("show");
+				}
+			},
+		});
+	});
+
 });
 
-$(document).on("click", ".product-remove", function () {
+$(document).on("click", ".remove-icon", function () {
 	var pid = $(this).attr("id");
 	$.ajax({
-		url: "remove-cart.php",
+		url: "update-cart.php",
 		method: "get",
 		data: { pid: pid, rem: 1 },
 		success: function (data) {
 			if (data == "done")
 				$(".ftco-cart").load(window.location.href + " .ftco-cart");
+		},
+	});
+});
+
+$('.quantity').on("input", function () {
+	var pid = $(this).attr("id");
+	var quan = parseInt($(this).val());
+	$.ajax({
+		url: "update-cart.php",
+		method: "get",
+		data: { pid: pid, upd: 1, quan: quan },
+		success: function (data) {
+			if (data == "done") {
+				var cur = "#" + pid + ".upP";
+				$(cur).load(window.location.href + " " + cur);
+				$('#amount').load(window.location.href + " #amount");
+			}
 		},
 	});
 });

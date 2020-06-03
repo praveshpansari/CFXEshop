@@ -67,14 +67,14 @@ $result = oci_fetch_assoc($query);
 	</div>
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="index.html">Vegefoods</a>
+			<a class="navbar-brand" href="index.php">Vegefoods</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
 			</button>
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
 					<li class="nav-item active dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
@@ -99,8 +99,8 @@ $result = oci_fetch_assoc($query);
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a href="index.html">Product</a></span> <span>Product Single</span></p>
-					<h1 class="mb-0 bread">Product Single</h1>
+					<p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span class="mr-2"><a href="shop.php">Product</a></span> <span><?= $result['PRODUCT_NAME'] ?></span></p>
+					<h1 class="mb-0 bread"><?= $result['PRODUCT_NAME'] ?></h1>
 				</div>
 			</div>
 		</div>
@@ -110,7 +110,7 @@ $result = oci_fetch_assoc($query);
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 mb-5 ftco-animate">
-					<a href="#" class="image-popup"><img src="<?= $result['PRODUCT_IMAGE'] ?>" class="img-fluid" style="width:100%"></a>
+					<a href="<?= $result['PRODUCT_IMAGE'] ?>" class="image-popup"><img src="<?= $result['PRODUCT_IMAGE'] ?>" class="img-fluid" style="width:100%"></a>
 				</div>
 				<div class="col-lg-6 product-details pl-md-5 ftco-animate">
 					<h3><?= $result['PRODUCT_NAME'] ?></h3>

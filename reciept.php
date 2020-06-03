@@ -8,13 +8,12 @@ use Dompdf\Dompdf;
 if (isset($_SESSION['loggedin'])) {
 
   if (isset($_POST['payment'])) {
-
+    $cart = $_SESSION['cartId'];
     $query = oci_parse($conn, "BEGIN :count := num_products('{$cart}'); END;");
     oci_bind_by_name($query, ":count", $count);
     oci_execute($query);
-    if ($count == 0) {
+    if ($count != 0) {
 
-      $cart = $_SESSION['cartId'];
       $slot = $_POST['slot'];
       $f = $_SESSION['first'];
       $l = $_SESSION['last'];
@@ -123,7 +122,7 @@ if (isset($_SESSION['loggedin'])) {
 
     table th,
     table td {
-      padding: 10px 10px;
+      padding: 5px 10px;
       background: #EEEEEE;
       text-align: center;
       border-bottom: 1px solid #FFFFFF;
@@ -379,8 +378,9 @@ if (isset($_SESSION['loggedin'])) {
 
       $query = oci_parse($conn, "DELETE FROM CART_PRODUCT WHERE CART_ID = '${cart}'");
       oci_execute($query);
+      $query = oci_parse($conn, "UPDATE CART SET AMOUNT = 0 WHERE CART_ID = '${cart}'");
+      oci_execute($query);
 
-      // SEND Mail
       if (mail($mailto, $subject, $body, $headers)) {
         unlink($file);
         echo "OK";

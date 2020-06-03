@@ -39,7 +39,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 </head>
 
 <body class="goto-here">
-	
+
 	<div id="myModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
@@ -204,12 +204,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 			<div class="row justify-content-center">
 				<div class="col-md-10 mb-5 text-center">
 					<ul class="product-category">
-						<li><a href="#" class="active">All</a></li>
-						<li><a href="#">Vegetables &amp; Fruits</a></li>
-						<li><a href="#">Bakery</a></li>
-						<li><a href="#">Fishes</a></li>
-						<li><a href="#">Meat</a></li>
-						<li><a href="#">Deli</a></li>
+						<li><a href="" id="0" class="filter-cat">All</a></li>
+						<?php
+						$query = oci_parse($conn, "SELECT * FROM CATEGORY");
+						oci_execute($query);
+						while ($result = oci_fetch_assoc($query)) {
+							echo '<li><a href="" class="filter-cat" id="' . $result["CATEGORY_NO"] . '">' . $result["FILTER_NAME"] . '</a></li>';
+						}
+						?>
 					</ul>
 				</div>
 			</div>

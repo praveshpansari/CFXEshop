@@ -4,19 +4,19 @@
 include 'connection.php';
 session_start();
 if (isset($_SESSION['loggedin'])) {
-    if ($_SESSION['loggedin']) {
+    if ($_SESSION['loggedin'] && $_SESSION['type'] == 'trader') {
         $query = oci_parse($conn, "SELECT * FROM CATEGORY");
         oci_execute($query);
         oci_fetch_all($query, $_SESSION['cat_name']);
         $_SESSION['shops'] = array();
     } else {
-        echo "You are logged out. Please log in. Redirecting...";
-        header('Refresh: 2,URL=http://localhost/website/index.html');
+        echo "Please Login as a trader. Redirecting...";
+        header('Refresh: 2,URL=http://localhost/website/index.php');
         die();
     }
 } else {
     echo "You are not allowed to access this page.Redirecting...";
-    header('Refresh: 2,URL=http://localhost/website/index.html');
+    header('Refresh: 2,URL=http://localhost/website/index.php');
     die();
 } ?>
 

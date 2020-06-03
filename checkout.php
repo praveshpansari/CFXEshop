@@ -368,15 +368,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
 		<script src="js/bootstrap-datepicker.js"></script>
 		<script src="js/scrollax.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-		<script src="https://www.paypal.com/sdk/js?client-id=ATzZLdq_nMR3SCYKscJAPQGqasL4TQi6p0i_nQjb-eeWCumq1_kyC3lhkDKozdaxDpZTUCXrh7oXa6TV&currency=GBP"></script>
+		<script src="https://www.paypal.com/sdk/js?client-id=ATzZLdq_nMR3SCYKscJAPQGqasL4TQi6p0i_nQjb-eeWCumq1_kyC3lhkDKozdaxDpZTUCXrh7oXa6TV&currency=USD"></script>
 		<script src="js/google-map.js"></script>
 		<script src="js/main.js"></script>
 
 		<script>
 			var $ = jQuery;
-			$('.cart-total').click(function() {
-				sendReceipt();
-			});
 
 			$('#formBill').submit(function(e) {
 				e.preventDefault();
@@ -416,8 +413,13 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
 							},
 							onApprove: function(data, actions) {
 								return actions.order.capture().then(function(details) {
+									$('body').append('<div class="parentDisable">');
+									$('body').css('overflow', 'hidden');
+									$("html, body").animate({
+										scrollTop: 0
+									}, "slow");
+									$('.alert').removeClass('hidden');
 									sendReceipt();
-									alert('Transaction completed by ' + details.payer.name.given_name + '!');
 								});
 							}
 						}).render('#paypal-button-container');
@@ -442,14 +444,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
 						slot: slot
 					},
 					success: function(data) {
-						if (data == 'OK') {
-							$('body').append('<div class="parentDisable">');
-							$('body').css('overflow', 'hidden');
-							$("html, body").animate({
-								scrollTop: 0
-							}, "slow");
-							$('.alert').removeClass('hidden');
-						} else
+						if (data != 'OK')
 							alert('There was a problem processing the order.');
 					}
 				});

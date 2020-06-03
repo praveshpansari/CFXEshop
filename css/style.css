@@ -12843,6 +12843,24 @@ h5,
   font-size: 12px;
 }
 
+.product .img-prod span.fav {
+  position:absolute;
+  top:0;
+  right:0;
+  padding:2px 10px;
+  color: #e83e8c;
+  font-size: 1.6rem;
+}
+
+
+.product span.car{
+  position:absolute;
+  bottom:0;
+  left:5%;
+  color: #82ae46;
+  font-size: 1.75rem;
+}
+
 .product .img-prod img {
   -webkit-transform: scale(1);
   -moz-transform: scale(1);

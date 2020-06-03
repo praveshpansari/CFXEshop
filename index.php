@@ -280,13 +280,13 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 								<div class="text text-center">
 									<h2>Fresh Foods</h2>
 									<p>Protect the health of every home</p>
-									<p><a href="shop.php" class="btn btn-primary">Shop now</a></p>
+									<p><a href="shop.php" class="btn btn-primary shop-cat" id="0">Shop now</a></p>
 
 								</div>
 							</div>
 							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
 								<div class="text px-3 py-1">
-									<h2 class="mb-0"><a href="#">Fruits &amp; Vegetables</a></h2>
+									<h2 class="mb-0"><a class="shop-cat" id="2" href="#">Fruits &amp; Vegetables</a></h2>
 								</div>
 							</div>
 						</div>
@@ -294,12 +294,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 						<div class="col-md-6">
 							<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
 								<div class="text px-3 py-1">
-									<h2 class="mb-0"><a href="#">Meat</a></h2>
+									<h2 class="mb-0"><a class="shop-cat" id="1" href="#">Meat</a></h2>
 								</div>
 							</div>
 							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-2.jpg);">
 								<div class="text px-3 py-1">
-									<h2 class="mb-0"><a href="#">Fishes</a></h2>
+									<h2 class="mb-0"><a class="shop-cat" id="3" href="#">Fishes</a></h2>
 								</div>
 							</div>
 						</div>
@@ -309,12 +309,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 				<div class="col-md-4">
 					<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-3.jpg);">
 						<div class="text px-3 py-1">
-							<h2 class="mb-0"><a href="#">Bakery</a></h2>
+							<h2 class="mb-0"><a class="shop-cat" id="4" href="#">Bakery</a></h2>
 						</div>
 					</div>
 					<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-4.jpg);">
 						<div class="text px-3 py-1">
-							<h2 class="mb-0"><a href="#">Deli</a></h2>
+							<h2 class="mb-0"><a class="shop-cat" id="5" href="#">Deli</a></h2>
 						</div>
 					</div>
 				</div>
