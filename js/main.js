@@ -579,6 +579,37 @@ $("#loginForm").on("submit", function () {
 	return false;
 });
 
+$(".stars").click(function (e) {
+	e.preventDefault();
+});
+
+// $(".give").hover(function () {
+// 	if ($(this).children().hasClass('ion-ios-star'))
+// 		$(this).children().prop('class', "ion-ios-star");
+// 	else
+// 		$(this).children().prop('class', "ion-ios-outline");
+// }, function () {
+// 	if ($(this).children().hasClass('ion-ios-star'))
+// 		$(this).children().prop('class', "ion-ios-star");
+// 	else
+// 		$(this).children().prop('class', "ion-ios-outline");
+// });
+
+$(document).on('click', '.give', function (e) {
+	e.preventDefault();
+	var star = $(this).attr('id');
+	var pid = $('#pid').val();
+	$.ajax({
+		url: 'favorite.php',
+		type: 'get',
+		data: { pid: pid, star: star },
+		success: function (response) {
+			$("#given").load(window.location.href + " #given");
+			$("#given2").load(window.location.href + " #given2");
+		}
+	});
+});
+
 $("#registerForm").submit(function () {
 	$("#registerBtn").hide();
 	var first_name = $("#first_name").val();
@@ -886,7 +917,6 @@ $(document).ready(function () {
 	$(document).on("click", ".buy-now", function () {
 		var pid = $(this).attr("id");
 		var min = $("#min-quantity").val();
-		var now = $(this);
 		$.ajax({
 			url: "cart.php",
 			method: "get",
@@ -918,6 +948,8 @@ $(document).ready(function () {
 	});
 
 });
+
+
 
 $(document).on("click", ".remove-icon", function () {
 	var pid = $(this).attr("id");
