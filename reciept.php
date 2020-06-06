@@ -21,7 +21,11 @@ if (isset($_SESSION['loggedin'])) {
       $add1 = $_SESSION['add1'];
       $add2 = $_SESSION['add2'];
       $tid = md5(time() . $f);
-      $query = oci_parse($conn, "INSERT INTO INVOICE VALUES (DEFAULT,'{$tid}',DEFAULT,DEFAULT,'{$slot}','{$cart}' )");
+      $query = oci_parse($conn, "SELECT * FROM CART WHERE CART_ID = '${cart}'");
+      oci_execute($query);
+      $result = oci_fetch_assoc($query);
+      $amount = $result['NET_AMOUNT'];
+      $query = oci_parse($conn, "INSERT INTO INVOICE VALUES (DEFAULT,'{$tid}',DEFAULT,DEFAULT,'{$slot}','{$cart}', '${amount}')");
       oci_execute($query);
       $query = oci_parse($conn, "UPDATE COLLECTION_SLOT SET ORDERS = ORDERS + 1 WHERE SLOT_ID = '${slot}'");
       oci_execute($query);
@@ -282,6 +286,8 @@ if (isset($_SESSION['loggedin'])) {
         $pr = $result['TOTAL'];
         $query2 = oci_parse($conn, "INSERT INTO ORDERS VALUES ('{$cid}','{$invoice}','{$pid}','{$sid}','{$q}','{$pr}')");
         oci_execute($query2);
+        $query3 = oci_parse($conn, "UPDATE SHOP_PRODUCT SET STOCK_AMOUNT = STOCK_AMOUNT - '{$q}' WHERE PRODUCT_ID = '${pid}'");
+        oci_execute($query3);
         $output .= "<tr>
           <td class='no'>$count</td>
           <td class='desc'>

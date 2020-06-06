@@ -6555,11 +6555,15 @@ a.close.disabled {
   pointer-events: none;
 }
 
-#registering {
+#registering, #registeringTrader {
   text-align: center;
 }
 
 #registering img {
+  display: inline-block;
+}
+
+#registeringTrader img {
   display: inline-block;
 }
 

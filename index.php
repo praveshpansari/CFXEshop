@@ -1,4 +1,5 @@
 <?php
+include 'connection.php';
 session_start();
 if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 	header('location:trader.php');
@@ -136,6 +137,84 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 		</div>
 	</div>
 
+	<div id="traderModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h6 class="modal-title">
+						Register as Trader
+					</h6><button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form class="bg-white p-3 register-form" id="registerTraderForm">
+						<div class="form-row mb-3">
+							<div class="col-md-12 col-sm-12">
+								<label for="trader_Name">Trader Name</label>
+								<input id="trader_name" type="text" class="form-control validate" minlength="4" maxlength="40" name="trader_name" required>
+							</div>
+						</div>
+						<div class="form-row mb-3">
+							<div class="col-12">
+								<label for="registerTraderEmail">Email</label>
+								<input id="registerTraderEmail" type="text" class="form-control validate" maxlength="40" name="registerTraderEmail" required>
+							</div>
+						</div>
+						<div class="form-row mb-3">
+							<div class="col-12">
+								<label for="website">Website</label>
+								<input id="website" type="text" class="form-control validate" maxlength="50" minlength="16" name="website" required>
+							</div>
+						</div>
+						<div class="form-row mb-3">
+							<div class="col-6">
+								<label for="registerTraderPassword">Password</label>
+								<input id="registerTraderPassword" type="password" class="form-control validate" maxlength="20" minlength="6" name="registerTraderPassword" required>
+
+							</div>
+							<div class="col-6">
+								<label for="phoneTrader">Phone Number</label>
+								<input id="phoneTrader" maxlength="12" type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" class="form-control validate" data-length="20" name="phoneTrader" required>
+							</div>
+						</div>
+
+						<div class="form-group mb-3">
+							<label for="category">Category</label>
+							<select id="category" name="category" class="form-control validate" required>
+								<?php
+								$query = oci_parse($conn, "SELECT * FROM CATEGORY");
+								oci_execute($query);
+								oci_fetch_all($query, $cat);
+
+								for ($x = 0; $x < count($cat['CATEGORY_NO']); $x++) {
+									echo "<option value=" . $cat['CATEGORY_NO'][$x]  . ">" . $cat['CATEGORY_NAME'][$x] . "</option>";
+								}
+								?>
+							</select>
+						</div>
+						<div class="form-row mb-3">
+							<div class="col-12 custom-control custom-checkbox">
+								<input type="checkbox" class="form-control custom-control-input" id="conditionsTrader" required name="conditionsTrader" />
+								<label class="custom-control-label" for="conditionsTrader">I agree to the terms and
+									conditions.</label>
+							</div>
+						</div>
+						<div class="form-row mb-3">
+							<button class="btn btn-primary col s12 z-depth-0" id="registerTraderBtn" type="submit">Register
+							</button>
+						</div>
+					</form>
+					<div id="registeringTrader">
+
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="py-1 bg-primary">
 		<div class="container">
 			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
@@ -195,7 +274,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 						<div class="col-md-12 ftco-animate text-center">
 							<h1 class="mb-2">We serve Fresh Vegetables &amp; Fruits</h1>
 							<h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-							<p><a href="#" class="btn btn-primary">View Details</a></p>
+							<p><a href="about.php" class="btn btn-primary">View Details</a></p>
 						</div>
 
 					</div>
@@ -210,7 +289,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 						<div class="col-sm-12 ftco-animate text-center">
 							<h1 class="mb-2">100% Fresh &amp; Organic Foods</h1>
 							<h2 class="subheading mb-4">We deliver organic vegetables &amp; fruits</h2>
-							<p><a href="#" class="btn btn-primary">View Details</a></p>
+							<p><a href="about.php" class="btn btn-primary">View Details</a></p>
 						</div>
 
 					</div>
@@ -229,7 +308,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 						</div>
 						<div class="media-body">
 							<h3 class="heading">Extra Discount</h3>
-							<span>On order over $100</span>
+							<span>On order over $300</span>
 						</div>
 					</div>
 				</div>
@@ -284,7 +363,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 
 								</div>
 							</div>
-							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
+							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-5.jpg);">
 								<div class="text px-3 py-1">
 									<h2 class="mb-0"><a class="shop-cat" id="2" href="#">Fruits &amp; Vegetables</a></h2>
 								</div>
@@ -322,269 +401,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 		</div>
 	</section>
 
-	<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center mb-3 pb-3">
-				<div class="col-md-12 heading-section text-center ftco-animate">
-					<span class="subheading">Featured Products</span>
-					<h2 class="mb-4">Our Products</h2>
-					<p>Checkout some of the products we offer!</p>
-				</div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-1.jpg" alt="Colorlib Template">
-							<span class="status">30%</span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Bell Pepper</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Strawberry</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-3.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Green Beans</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Purple Cabbage</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-5.jpg" alt="Colorlib Template">
-							<span class="status">30%</span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Tomatoe</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-6.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Brocolli</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-7.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Carrots</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-8.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Fruit Juice</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="ftco-section img" style="background-image: url(images/bg_3.jpg);">
-		<div class="container">
-			<div class="row justify-content-end">
-				<div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
-					<span class="subheading">Best Price For You</span>
-					<h2 class="mb-4">Deal of the day</h2>
-					<p>Checkout the fresh deal for today.</p>
-					<h3><a href="#">Spinach</a></h3>
-					<span class="price">$10 <a href="#">now $5 only</a></span>
-					<div id="timer" class="d-flex mt-5">
-						<div class="time" id="days"></div>
-						<div class="time pl-3" id="hours"></div>
-						<div class="time pl-3" id="minutes"></div>
-						<div class="time pl-3" id="seconds"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">
 			<div class="row d-flex justify-content-center py-5">
@@ -601,6 +417,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 					</form>
 				</div>
 			</div>
+			<a href="" data-toggle="modal" data-target="#traderModal">Want to register as a trader?</a>
 		</div>
 	</section>
 	<footer class="ftco-footer ftco-section">

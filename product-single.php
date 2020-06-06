@@ -248,10 +248,15 @@ $result = oci_fetch_assoc($query);
 						<div class="w-100"></div>
 
 						<?php
-						$cid = $_SESSION['cartId'];
-						$incart = oci_parse($conn, "BEGIN :count := check_cart('${cid}', '${id}'); END;");
-						oci_bind_by_name($incart, ":count", $num);
-						oci_execute($incart);
+						if (isset($_SESSION['loggedin'])) {
+
+
+							$cid = $_SESSION['cartId'];
+							$incart = oci_parse($conn, "BEGIN :count := check_cart('${cid}', '${id}'); END;");
+							oci_bind_by_name($incart, ":count", $num);
+							oci_execute($incart);
+						} else $num = 0;
+
 						if ($num == 0) {
 						?>
 							<div id="quanta" style="display: block;" class="col-md-12 no-gutters">
@@ -298,11 +303,13 @@ $result = oci_fetch_assoc($query);
 									<div class="col-md-6">
 										<div id="cart-btn">
 											<?php
-											$cid = $_SESSION['cartId'];
-											$incart = oci_parse($conn, "BEGIN :count := check_cart('${cid}', '${id}'); END;");
-											oci_bind_by_name($incart, ":count", $num);
-											oci_execute($incart);
-											echo (($num == 0) ? '<a id="add-cart" class="btn btn-black col-md-12 py-3"><span>Add to Cart</span></a>' : '<a id="rem-cart" class="btn btn-black col-md-12 py-3"><span>Remove from Cart</span></a>');
+											if (isset($_SESSION['loggedin'])) {
+												$cid = $_SESSION['cartId'];
+												$incart = oci_parse($conn, "BEGIN :count := check_cart('${cid}', '${id}'); END;");
+												oci_bind_by_name($incart, ":count", $num);
+												oci_execute($incart);
+											} else $num = 0;
+											echo (($num == 0) ? '<a id="add-cart" style="color:white" class="btn btn-black col-md-12 py-3"><span>Add to Cart</span></a>' : '<a id="rem-cart" class="btn btn-black col-md-12 py-3"><span>Remove from Cart</span></a>');
 											?>
 										</div>
 									</div>
@@ -339,50 +346,6 @@ $result = oci_fetch_assoc($query);
 				</div>
 			</div>
 	</section>
-
-	<!-- <section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center mb-3 pb-3">
-				<div class="col-md-12 heading-section text-center ftco-animate">
-					<span class="subheading">Products</span>
-					<h2 class="mb-4">Related Products</h2>
-					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-				</div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src="images/product-4.jpg" alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#">Purple Cabbage</a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$120.00</span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section> -->
 
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">

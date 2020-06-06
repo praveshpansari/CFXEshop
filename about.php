@@ -65,7 +65,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
   </div>
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">CFX eShop</a>
+      <a class="navbar-brand" href="index.php">CFX eShop</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
         aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
@@ -124,7 +124,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
             <p>Choose from our six differnet categories containing hundreds of different products. Buy at your
               convenience, whenever you want. We take orders 24/7. No need to make seperate time during working hours.
             </p>
-            <p><a href="shop.html" class="btn btn-primary">Shop now</a></p>
+            <p><a href="shop.php" class="btn btn-primary">Shop now</a></p>
           </div>
         </div>
       </div>
@@ -193,68 +193,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
     </div>
   </section>
 
-  <section class="ftco-section testimony-section">
-    <div class="container">
-      <div class="row justify-content-center mb-5 pb-3">
-        <div class="col-md-7 heading-section ftco-animate text-center">
-          <span class="subheading">Testimony</span>
-          <h2 class="mb-4">Our satisfied customer says</h2>
-          <p>One of the best portals for fulfilling your family's daily needs.</p>
-        </div>
-      </div>
-      <div class="row ftco-animate">
-        <div class="col-md-12">
-          <div class="carousel-testimony owl-carousel">
-            <div class="item">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-5" style="background-image: url(images/person_1.jpg)">
-                  <span class="quote d-flex align-items-center justify-content-center">
-                    <i class="icon-quote-left"></i>
-                  </span>
-                </div>
-                <div class="text text-center">
-                  <p class="mb-5 pl-4 line">I have placed more than 20 orders on this website. And each time they have
-                    not disappointed me.</p>
-                  <p class="name">Amy James</p>
-                  <span class="position">Housewife</span>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-5" style="background-image: url(images/person_2.jpg)">
-                  <span class="quote d-flex align-items-center justify-content-center">
-                    <i class="icon-quote-left"></i>
-                  </span>
-                </div>
-                <div class="text text-center">
-                  <p class="mb-5 pl-4 line">As I am busy working, this website have helped me save a ton of a time and
-                    lashings from my boss.</p>
-                  <p class="name">Garreth Smith</p>
-                  <span class="position">Engineer</span>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-5" style="background-image: url(images/person_3.jpg)">
-                  <span class="quote d-flex align-items-center justify-content-center">
-                    <i class="icon-quote-left"></i>
-                  </span>
-                </div>
-                <div class="text text-center">
-                  <p class="mb-5 pl-4 line">As a single student, this platform helps me decide on my requirements and
-                    buy them easily.</p>
-                  <p class="name">Alok Raj</p>
-                  <span class="position">Student</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  </section>
-
   <section class="ftco-section bg-light">
     <div class="container">
 			<div class="row no-gutters ftco-services">
@@ -265,7 +203,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 						</div>
 						<div class="media-body">
 							<h3 class="heading">Extra Discount</h3>
-							<span>On order over $100</span>
+							<span>On order over $300</span>
 						</div>
 					</div>
 				</div>

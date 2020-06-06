@@ -70,4 +70,45 @@ if (isset($_POST['first_name']) && isset($_POST['username']) && isset($_POST['ag
     } else {
         echo 'firstname';
     }
+} else if (isset($_POST['trader_name']) && isset($_POST['website']) && isset($_POST['trader']) && isset($_POST['category']) && isset($_POST['registerTraderEmail']) && isset($_POST['registerTraderPassword']) && isset($_POST['phone'])) {
+    $trader_name = $_POST['trader_name'];
+    $category = $_POST['category'];
+    if (filter_var($_POST['registerTraderEmail'], FILTER_VALIDATE_EMAIL)) {
+        $registerEmail = $_POST['registerTraderEmail'];
+        if (preg_match('^(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=.*\d)(?!.* ).{8,}$^', $_POST['registerTraderPassword'])) {
+            $registerPassword = $_POST['registerTraderPassword'];
+            $website = $_POST['website'];
+            $query = oci_parse($conn, "SELECT * FROM USERS WHERE EMAIL = '${registerEmail}'");
+            oci_execute($query);
+            if (oci_fetch($query)) {
+                echo 'email_exists';
+            } else {
+                $phone = $_POST['phone'];
+                $default = 'DEFAULT';
+                $vkey = md5(time() . $trader_name);
+                $query = oci_parse($conn, "BEGIN REGISTER_TRADER('{$registerPassword}','{$registerEmail}','{$phone}','{$vkey}','T','{$trader_name}','{$website}','{$category}'); END;");
+                oci_execute($query);
+                $to = $registerEmail;
+                $subject = "Email Verification - CFX eShop";
+                $message = "<h2 style='font:Calibri'>Hello $trader_name!</h2>
+                                            <div style='font:Calibri;font-size:0.9rem'>
+                                            Welcome to CFX eShop! We’re happy to have you with us. <br>
+                                            Just verify your email subscription to login and start selling your goods from our portal.<br><br>
+                                            <a style='padding:10px 10px;text-decoration:none;font-size:0.6rem;text-transform:uppercase;letter_spacing:1px;background:green;color:white;font-weight:600;' target='_blank' href='http://localhost/website/verify.php?vkey=$vkey'>Verify Account</a><br><br>
+                                            If you received this email by mistake, just delete it. You won't be subscribed if you don't confirm your subscription above.<br>
+                                            Thanks again for joining our community!<br><br>
+                                            Sincerely,<br>
+                                            CFX eShop</div>";
+                $headers = "From: cfxeshop@gmail.com" . "\r\n";
+                $headers .= "MIME-Version:1.0" . "\r\n";
+                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                echo "success";
+                mail($to, $subject, $message, $headers);
+            }
+        } else {
+            echo 'password';
+        }
+    } else {
+        echo 'email';
+    }
 }

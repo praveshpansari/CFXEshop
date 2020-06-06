@@ -61,7 +61,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
   </div>
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Vegefoods</a>
+      <a class="navbar-brand" href="index.php">Vegefoods</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
@@ -113,12 +113,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
         </div>
         <div class="col-md-3 d-flex">
           <div class="info bg-white p-4">
-            <p><span>Email:</span> <a href="mailto:info@cfx.com">info@cfx.com</a></p>
+            <p><span>Email:</span> <a href="mailto:cfxeshop@gmail.com<">cfxeshop@gmail.com</a></p>
           </div>
         </div>
         <div class="col-md-3 d-flex">
           <div class="info bg-white p-4">
-            <p><span>Website</span> <a href="index.html">www.cfxeshop.com</a></p>
+            <p><span>Website</span> <a href="index.php">www.cfxeshop.com</a></p>
           </div>
         </div>
       </div>

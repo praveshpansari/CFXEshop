@@ -583,18 +583,6 @@ $(".stars").click(function (e) {
 	e.preventDefault();
 });
 
-// $(".give").hover(function () {
-// 	if ($(this).children().hasClass('ion-ios-star'))
-// 		$(this).children().prop('class', "ion-ios-star");
-// 	else
-// 		$(this).children().prop('class', "ion-ios-outline");
-// }, function () {
-// 	if ($(this).children().hasClass('ion-ios-star'))
-// 		$(this).children().prop('class', "ion-ios-star");
-// 	else
-// 		$(this).children().prop('class', "ion-ios-outline");
-// });
-
 $(document).on('click', '.give', function (e) {
 	e.preventDefault();
 	var star = $(this).attr('id');
@@ -685,7 +673,77 @@ $("#registerForm").submit(function () {
 	return false;
 });
 
+$("#registerTraderForm").submit(function () {
+	$("#registerTraderBtn").hide();
+	var trader_name = $("#trader_name").val();
+	var registerTraderEmail = $("#registerTraderEmail").val();
+	var registerTraderPassword = $("#registerTraderPassword").val();
+	var website = $("#website").val();
+	var phone = $("#phoneTrader").val();
+	var category = $("#category option:selected").val();
+	$.ajax({
+		url: "register.php",
+		type: "post",
+		data: {
+			trader: 1,
+			trader_name: trader_name,
+			phone: phone,
+			registerTraderEmail: registerTraderEmail,
+			registerTraderPassword: registerTraderPassword,
+			website: website,
+			category: category
+		},
+		beforeSend: function () {
+			$("#registeringTrader").html("<img src=images/loader.gif>");
+		},
+		success: function (data) {
+			var msg = "";
+			switch (data) {
+				case "success":
+					msg =
+						"<span>Account registered. Please check your email for an activation link to your account.</span>";
+					break;
+
+				case "email_exists":
+					msg =
+						"<span>An account with this email address already exists!</span>";
+					break;
+
+				case "password":
+					msg =
+						"<span>Your Password must be of length 8 and contain at least 1 symbol,1 uppercase letter and 1 number without spaces!</span>";
+					break;
+
+				case "website":
+					msg =
+						"<span>Your website must be a valid url.</span>";
+					break;
+
+				case "email":
+					msg = "<span>Please enter a valid email!</span>";
+					break;
+			}
+			$("#registeringTrader").html(
+				'<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div ><div class="toast-body" style="text-align:left" id="error">' +
+				msg +
+				"</div></div > "
+			);
+			$("#wrong_email").toast("show");
+			$("#registerTraderBtn").show();
+		},
+	});
+	return false;
+});
+
 $("#phone").keyup(function () {
+	$(this).val(
+		$(this)
+			.val()
+			.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, "$1-$2-$3")
+	);
+});
+
+$("#phoneTrader").keyup(function () {
 	$(this).val(
 		$(this)
 			.val()

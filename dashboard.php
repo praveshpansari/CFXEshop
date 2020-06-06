@@ -95,7 +95,7 @@ if (isset($_SESSION['loggedin'])) {
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">CFX eShop</a>
+            <a class="navbar-brand" href="index.php">CFX eShop</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
@@ -268,7 +268,7 @@ if (isset($_SESSION['loggedin'])) {
                                 $result = [1][0];
                                 oci_execute($query);
                                 if (oci_fetch_assoc($query)['NUM'] != 0) {
-                                    $query = oci_parse($conn, "SELECT DISTINCT INVOICE_NO,PAYMENT_DATE,SUM(SELL_PRICE) price FROM ORDERS NATURAL JOIN INVOICE WHERE CUSTOMER_ID = '${userId}' GROUP BY INVOICE_NO,PAYMENT_DATE");
+                                    $query = oci_parse($conn, "SELECT DISTINCT INVOICE_NO,PAYMENT_DATE,SUM(SELL_PRICE) price FROM ORDERS NATURAL JOIN INVOICE WHERE CUSTOMER_ID = '${userId}' GROUP BY INVOICE_NO,PAYMENT_DATE ORDER BY PAYMENT_DATE DESC");
                                     oci_execute($query); ?>
                                     <div class="table-responsive">
                                         <table class="table table-hover">
