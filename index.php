@@ -363,22 +363,22 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 
 								</div>
 							</div>
-							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-5.jpg);">
+							<div class="category-wrap shop-cat ftco-animate img d-flex align-items-end" style="background-image: url(images/category-5.jpg);cursor:pointer">
 								<div class="text px-3 py-1">
-									<h2 class="mb-0"><a class="shop-cat" id="2" href="#">Fruits &amp; Vegetables</a></h2>
+									<h2 class="mb-0"><a id="2" href="#">Fruits &amp; Vegetables</a></h2>
 								</div>
 							</div>
 						</div>
 
 						<div class="col-md-6">
-							<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-1.jpg);">
+							<div class="category-wrap shop-cat  ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-1.jpg);cursor:pointer">
 								<div class="text px-3 py-1">
-									<h2 class="mb-0"><a class="shop-cat" id="1" href="#">Meat</a></h2>
+									<h2 class="mb-0"><a id="1" href="#">Meat</a></h2>
 								</div>
 							</div>
-							<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-2.jpg);">
+							<div class="category-wrap  shop-cat ftco-animate img d-flex align-items-end" style="background-image: url(images/category-2.jpg);cursor:pointer">
 								<div class="text px-3 py-1">
-									<h2 class="mb-0"><a class="shop-cat" id="3" href="#">Fishes</a></h2>
+									<h2 class="mb-0"><a id="3" href="#">Fishes</a></h2>
 								</div>
 							</div>
 						</div>
@@ -386,14 +386,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 				</div>
 
 				<div class="col-md-4">
-					<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-3.jpg);">
+					<div class="category-wrap shop-cat  ftco-animate img mb-4 d-flex align-items-end" style="background-image: url(images/category-3.jpg);cursor:pointer">
 						<div class="text px-3 py-1">
-							<h2 class="mb-0"><a class="shop-cat" id="4" href="#">Bakery</a></h2>
+							<h2 class="mb-0"><a id="4" href="#">Bakery</a></h2>
 						</div>
 					</div>
-					<div class="category-wrap ftco-animate img d-flex align-items-end" style="background-image: url(images/category-4.jpg);">
+					<div class="category-wrap shop-cat  ftco-animate img d-flex align-items-end" style="background-image: url(images/category-4.jpg);cursor:pointer">
 						<div class="text px-3 py-1">
-							<h2 class="mb-0"><a class="shop-cat" id="5" href="#">Deli</a></h2>
+							<h2 class="mb-0"><a id="5" href="#">Deli</a></h2>
 						</div>
 					</div>
 				</div>

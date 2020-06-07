@@ -201,8 +201,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 
 	<section class="ftco-section">
 		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-10 mb-5 text-center">
+			<div class="row justify-content-center align-items-center mb-5">
+				<div class="col-md-10 text-center">
 					<ul class="product-category">
 						<li><a href="" id="0" class="filter-cat">All</a></li>
 						<?php
@@ -211,8 +211,20 @@ if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 						while ($result = oci_fetch_assoc($query)) {
 							echo '<li><a href="" class="filter-cat" id="' . $result["CATEGORY_NO"] . '">' . $result["FILTER_NAME"] . '</a></li>';
 						}
-						?>
+						if (isset($_SESSION['loggedin'])) { ?>
+							<li><a href="" class="filter-cat" id="6">Favorites</a></li>
+						<?php } ?>
 					</ul>
+
+				</div>
+				<div class="col-md-2">
+					<select id="sort" name="category" class="form-control validate" required>
+						<option value="0" selected>Sort By</option>
+						<option value="1">Name A-Z</option>
+						<option value="2">Name Z-A</option>
+						<option value="3">Price Higher</option>
+						<option value="4">Price Lower</option>
+					</select>
 				</div>
 			</div>
 			<div id="products"></div>

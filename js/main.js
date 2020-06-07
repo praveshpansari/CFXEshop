@@ -926,19 +926,22 @@ $(document).ready(function () {
 
 	if (!localStorage.getItem("filter")) localStorage.setItem("filter", 0);
 
+	if (!localStorage.getItem("sort")) localStorage.setItem("sort", 0);
+
 	$('.filter-cat#' + localStorage.getItem("filter")).addClass('active');
+	$('#sort').val(localStorage.getItem("sort"));
 
 	if (!localStorage.getItem("pageNum")) {
 		localStorage.setItem("pageNum", 1);
-		load_data(1, localStorage.getItem("filter"));
+		load_data(1, localStorage.getItem("filter"), localStorage.getItem("sort"));
 	}
-	else load_data(localStorage.getItem("pageNum"), localStorage.getItem("filter"));
+	else load_data(localStorage.getItem("pageNum"), localStorage.getItem("filter"), localStorage.getItem("sort"));
 
-	function load_data(page, filter) {
+	function load_data(page, filter, sort) {
 		$.ajax({
 			url: "products.php",
 			method: "GET",
-			data: { page: page, filter: filter },
+			data: { page: page, filter: filter, sort: sort },
 			success: function (data) {
 				$("#products").html(data);
 			},
@@ -948,7 +951,7 @@ $(document).ready(function () {
 	$(document).on("click", ".pag_link", function () {
 		page = $(this).children("a").attr("id");
 		localStorage.setItem("pageNum", page);
-		load_data(page, localStorage.getItem("filter"));
+		load_data(page, localStorage.getItem("filter"), localStorage.getItem("sort"));
 	});
 
 	$('.filter-cat').click(function (e) {
@@ -958,18 +961,24 @@ $(document).ready(function () {
 		$(this).addClass('active');
 		localStorage.setItem("filter", filter);
 		localStorage.setItem("pageNum", 1);
-		load_data(1, filter);
+		load_data(1, filter, localStorage.getItem("sort"));
 	})
 
 	$('.shop-cat').click(function (e) {
 		e.preventDefault();
 		window.location = 'shop.php';
-		var filter = $(this).attr('id');
+		var filter = $(this).children().children().children().attr('id');
 		$('.filter-cat').removeClass('active');
 		$(this).addClass('active');
 		localStorage.setItem("filter", filter);
 		localStorage.setItem("pageNum", 1);
-		load_data(1, filter);
+		load_data(1, filter, localStorage.getItem("sort"));
+	});
+
+	$('#sort').on('change', function () {
+		var sort = $('#sort option:selected').val();
+		localStorage.setItem("sort", sort);
+		load_data(localStorage.getItem("pageNum"), localStorage.getItem("filter"), sort);
 	});
 
 	$(document).on("click", ".buy-now", function () {

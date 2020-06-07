@@ -5,6 +5,29 @@ $items = 12;
 
 isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
 isset($_GET['filter']) ? $filter = $_GET['filter'] : $filter = 0;
+isset($_GET['sort']) ? $sort = $_GET['sort'] : $sort = 6;
+
+switch ($sort) {
+    case 0:
+        $sortby = 'PRODUCT_ID';
+        break;
+    case 1:
+        $sortby = 'PRODUCT_NAME ASC';
+        break;
+    case 2:
+        $sortby = 'PRODUCT_NAME DESC';
+        break;
+    case 3:
+        $sortby = 'PRICE DESC';
+        break;
+    case 4:
+        $sortby = 'PRICE ASC';
+        break;
+    case 6:
+        $sortby = 'PRODUCT_ID';
+        break;
+}
+
 if ($page > 1) {
     $start = ($page * $items) - $items + 1;
     $upper = $start + $items - 1;
@@ -25,14 +48,23 @@ if ($filter == 0) {
     $totalRows = oci_fetch_assoc($query)["NUM"];
 
     $totalPages = ceil($totalRows / $items);
-    $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY PRODUCT_ID) MyRow FROM PRODUCT t) WHERE MyRow BETWEEN '${start}' AND '${upper}'");
+    $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY ${sortby}) MyRow FROM PRODUCT t) WHERE MyRow BETWEEN '${start}' AND '${upper}'");
 } else {
-    $query = oci_parse($conn, "SELECT count(*) NUM FROM PRODUCT_CATEGORY WHERE CATEGORY_NO = '${filter}'");
-    oci_execute($query);
-    $totalRows = oci_fetch_assoc($query)["NUM"];
+    if ($filter != 6) {
+        $query = oci_parse($conn, "SELECT count(*) NUM FROM PRODUCT_CATEGORY WHERE CATEGORY_NO = '${filter}'");
+        oci_execute($query);
+        $totalRows = oci_fetch_assoc($query)["NUM"];
 
-    $totalPages = ceil($totalRows / $items);
-    $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY PRODUCT_ID) MyRow FROM PRODUCT_CATEGORY t WHERE CATEGORY_NO = '${filter}') WHERE MyRow BETWEEN '${start}' AND '${upper}'");
+        $totalPages = ceil($totalRows / $items);
+        $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY ${sortby}) MyRow FROM PRODUCT_CATEGORY t WHERE CATEGORY_NO = '${filter}') WHERE MyRow BETWEEN '${start}' AND '${upper}'");
+    } else {
+        $query = oci_parse($conn, "SELECT count(*) NUM FROM PRODUCT NATURAL JOIN FAVORITE WHERE CUSTOMER_ID = '${id}'");
+        oci_execute($query);
+        $totalRows = oci_fetch_assoc($query)["NUM"];
+
+        $totalPages = ceil($totalRows / $items);
+        $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY ${sortby}) MyRow FROM FAVORITE_PRODUCT t WHERE CUSTOMER_ID = '${id}') WHERE MyRow BETWEEN '${start}' AND '${upper}'");
+    }
 }
 
 oci_execute($query);
