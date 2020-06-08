@@ -31,7 +31,8 @@ if (isset($_SESSION['loggedin'])) {
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
@@ -48,6 +49,7 @@ if (isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body class="goto-here dashboard">
@@ -257,17 +259,16 @@ if (isset($_SESSION['loggedin'])) {
                             <h5 class="card-title mb-n1">Your Shops</h5>
                             <p class="card-text">
                                 <h6 class="mt-5 mb-4">Shop Information</h6>
-
-                                <?php
-                                $userId = $_SESSION['id'];
-                                $query = oci_parse($conn, "SELECT count(SHOP_ID) NUM FROM SHOP WHERE SUPPLIER_ID = '${userId}'");
-                                $result = [1][0];
-                                oci_execute($query);
-                                if (oci_fetch_assoc($query)['NUM'] != 0) {
-                                    $query = oci_parse($conn, "SELECT SHOP_ID, SHOP_NAME, to_char(DATED, 'DDth MONTH, YYYY') DATED FROM SHOP WHERE SUPPLIER_ID = '${userId}'");
-                                    oci_execute($query); ?>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
+                                <div class="table-responsive">
+                                    <?php
+                                    $userId = $_SESSION['id'];
+                                    $query = oci_parse($conn, "SELECT count(SHOP_ID) NUM FROM SHOP WHERE SUPPLIER_ID = '${userId}'");
+                                    $result = [1][0];
+                                    oci_execute($query);
+                                    if (oci_fetch_assoc($query)['NUM'] != 0) {
+                                        $query = oci_parse($conn, "SELECT SHOP_ID, SHOP_NAME, to_char(DATED, 'DDth MONTH, YYYY') DATED FROM SHOP WHERE SUPPLIER_ID = '${userId}'");
+                                        oci_execute($query); ?>
+                                        <table id="shopTable" class="table table-hover" style="width: 100% !important">
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th scope="col">Reg. No.</th>
@@ -297,11 +298,11 @@ if (isset($_SESSION['loggedin'])) {
                                                 ?>
                                             </tbody>
                                         </table>
-                                    </div>
-                                <?php } else {
-                                    echo "No records found";
-                                }
-                                ?>
+                                </div>
+                            <?php } else {
+                                        echo "No records found";
+                                    }
+                            ?>
                             </p>
                         </div>
                     </div>
@@ -312,7 +313,7 @@ if (isset($_SESSION['loggedin'])) {
                         <div class="card-body">
                             <h5 class="card-title">Add a Product</h5>
                             <p class="card-text">
-                                <form id="addProduct" action="" method="get">
+                                <form id="addProductForm" action="" method="get">
                                     <div id="errorInfo"></div>
                                     <h6>Product Information</h6>
                                     <div class="form-row align-items-start">
@@ -403,7 +404,41 @@ if (isset($_SESSION['loggedin'])) {
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Manage Your Products</h5>
-                            <p class="card-text" id="manageProductPara">
+                            <p class="card-text">
+
+                                <div id="manageProductPara">
+                                    <h6 class='mt-5 mb-4'>Your Products</h6>
+                                    <div class='table-responsive'>
+                                        <table id='productTable' class='table table-hover' cellspacing='0' style="width:100% !important">
+                                            <thead class='thead-dark'>
+                                                <tr>
+                                                    <th scope='col' style="width: 20% !important;">Product Image</th>
+                                                    <th scope='col' style="width: 20% !important;">Product Name</th>
+                                                    <th scope='col' style="width: 15% !important;">Price</th>
+                                                    <th scope='col' style="width: 15% !important;">Stock Remaining</th>
+                                                    <th scope='col' style="width: 25% !important;">Shop</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $id = $_SESSION['id'];
+                                                $query = oci_parse($conn, "SELECT * FROM SUPPLIER_PRODUCTS t WHERE SUPPLIER_ID = '${id}'");
+                                                oci_execute($query);
+                                                while ($result = oci_fetch_assoc($query)) {
+                                                    echo "<tr class='edit-product' style='cursor:pointer' id='" . $result['PRODUCT_ID'] . "'>
+                                                            <td style='padding-top:5px;padding-bottom:5px'><img class='img-fluid' src='" . $result['PRODUCT_IMAGE'] . "'></td>
+                                                            <td>" . $result['PRODUCT_NAME'] . "</td>
+                                                            <td>$" . $result['PRICE'] . "</td>
+                                                            <td>" . $result['STOCK_AMOUNT'] . "</td>
+                                                            <td>" . $result['SHOP_NAME'] . "</td>
+                                                        </tr>";
+                                                } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="editProduct"></div>
                             </p>
                         </div>
                     </div>
@@ -507,10 +542,12 @@ if (isset($_SESSION['loggedin'])) {
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/aos.js"></script>
     <script src="js/jquery.animateNumber.min.js"></script>
+    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
     <script src="js/scrollax.min.js"></script>
     <script src="js/google-map.js"></script>
     <script src="js/main.js"></script>
+
 </body>
 
 </html>

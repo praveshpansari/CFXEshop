@@ -6,6 +6,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
 	if ($_SESSION['type'] == 'trader') {
 		header('location:trader.php');
 	}
+
+	if ($_SESSION['type'] == 'admin') {
+		header('location:admin.php');
+	}
+
 	$cart = $_SESSION['cartId'];
 	$query = oci_parse($conn, "BEGIN :count := num_products('{$cart}'); END;");
 	oci_bind_by_name($query, ":count", $count);

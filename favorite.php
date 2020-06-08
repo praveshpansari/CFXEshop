@@ -7,6 +7,9 @@ if (isset($_SESSION['loggedin'])) {
 	if ($_SESSION['type'] == 'trader')
 		header('location:trader.php');
 
+	else if ($_SESSION['type'] == 'admin')
+		header('location:admin.php');
+
 	else if (isset($_GET['fav']) && isset($_GET['pid'])) {
 		$pid = $_GET['pid'];
 

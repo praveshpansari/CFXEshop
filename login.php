@@ -51,6 +51,14 @@ if (isset($_POST['emailId']) && isset($_POST['password'])) {
                     $_SESSION['pic'] = $result2['SUPPLIER_PIC'];
                     echo "successT";
                 } else {
+                    session_start();
+                    $_SESSION['type'] = 'admin';
+                    $_SESSION['id'] = $userId;
+                    $query = oci_parse($conn, "SELECT * FROM ADMIN WHERE ADMIN_ID = '${userId}'");
+                    oci_execute($query);
+                    $result2 = oci_fetch_assoc($query);
+                    $_SESSION['email'] = $email;
+                    $_SESSION['user'] = $result2['ADMIN_NAME'];
                     echo "successA";
                 }
                 $_SESSION['loggedin'] = true;

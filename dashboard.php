@@ -5,8 +5,10 @@ include 'connection.php';
 session_start();
 if (isset($_SESSION['loggedin'])) {
     if ($_SESSION['loggedin']) {
-        if ($_SESSION['type'] != 'customer')
+        if ($_SESSION['type'] == 'trader')
             header('location:trader.php');
+        if ($_SESSION['type'] == 'admin')
+            header('location:admin.php');
     } else {
         echo "You are logged out. Please log in. Redirecting...";
         header('Refresh: 2,URL=http://localhost/website/index.php');

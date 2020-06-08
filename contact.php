@@ -2,6 +2,8 @@
 session_start();
 if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'trader') {
 	header('location:trader.php');
+} else if (isset($_SESSION['loggedin']) && $_SESSION['type'] == 'admin') {
+	header('location:admin.php');
 }
 ?>
 

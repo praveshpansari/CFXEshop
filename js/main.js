@@ -510,12 +510,8 @@ $("#updateProfileT").submit(function (e) {
 				$("#errInd").html('<div class="toast mb-5 mt-n3" data-autohide="false" id="wrong_info"><div class="toast-header"><strong style="color:#f76666"> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="error">Invalid First Name or Last Name</div></div>');
 				$("#wrong_info").toast("show");
 			}
-
-
 		}
-
 	})
-
 });
 
 $("#ora")
@@ -554,7 +550,7 @@ $("#loginForm").on("submit", function () {
 							window.location = "trader.php";
 							break;
 						case "successA":
-							window.location = "dashboard.php";
+							window.location = "admin.php";
 							break;
 					}
 				} else {
@@ -565,6 +561,9 @@ $("#loginForm").on("submit", function () {
 					} else if (data == "not_verified") {
 						msg =
 							"<span>Your account is not verified!<br>Please verify your account using the link sent to your email.</span>";
+					} else if (data == "not_approved") {
+						msg =
+							"<span>Your request for account is under review for approval.<br>Please wait for 2-3 days for your account to be approved.</span>";
 					}
 					$("#registering").html(
 						'<div class="toast" data-autohide="false" id="wrong_email"><div class="toast-header"><strong> Alert!</strong><button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button></div ><div class="toast-body" style="text-align:left" id="error">' +
@@ -767,6 +766,20 @@ $(document).ready(function () {
 	});
 
 	$("#shopManage").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
+	});
+
+	$("#approveTraders").on("shown.bs.collapse", function () {
+		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
+		var collapseItem = localStorage.getItem("collapseItem");
+		$(".btn-accord").removeClass("active");
+		$(collapseItem + "Btn").addClass("active");
+	});
+
+	$("#manageTraders").on("shown.bs.collapse", function () {
 		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
 		var collapseItem = localStorage.getItem("collapseItem");
 		$(".btn-accord").removeClass("active");
@@ -1016,7 +1029,26 @@ $(document).ready(function () {
 
 });
 
+$(document).ready(function () {
+	$('#shopTable').DataTable();
+	$('#traderTable').DataTable();
+});
 
+$('#shopTable').DataTable({
+	responsive: true
+});
+
+$('.approve').click(function() {
+	var tid = $(this).attr('id');
+	$.ajax({
+		url:'action.php',
+		method:'post',
+		data: {approve:1,tid:tid},
+		success:function(data) {
+			$("#approveTraders").load(window.location.href + " #approveTraders");
+		}
+	})
+});
 
 $(document).on("click", ".remove-icon", function () {
 	var pid = $(this).attr("id");
@@ -1048,55 +1080,27 @@ $('.quantity').on("input", function () {
 	});
 });
 
+
 $(document).ready(function () {
-	load_data(1);
 
-	function load_data(page, sort) {
-		$.ajax({
-			url: "edit-product.php",
-			method: "GET",
-			data: { view: 1, page: page, sort: sort },
-			success: function (data) {
-				if (data == "no") {
-					$("#manageProductPara").html("NO PRODUCT FOUNDS");
-				} else {
-					$("#manageProductPara").html(data);
-				}
-			},
-		});
-	}
-
-	$(document).on("click", ".page-link-bs", function () {
-		var page = $(this).attr("id");
-		if ($(this).hasClass("prev")) page--;
-		else if ($(this).hasClass("next")) page++;
-
-		load_data(page);
+	var table = $('#productTable').DataTable({
+		responsive: true
 	});
 
-	var order = "aesc";
-	$(document).on("click", "#sort-price", function () {
-		var page = $(".pagination-bs").attr("id");
-		if (order == "aesc") {
-			load_data(page, "PRICE ASC");
-			order = "desc";
-		} else if (order == "desc") {
-			load_data(page, "PRICE DESC");
-			order = "aesc";
-		}
-	});
+
+
 
 	function edit_product(pid) {
-		var page = $(".pagination-bs").attr("id");
 		$.ajax({
 			url: "edit-product.php",
 			method: "GET",
-			data: { edit: 1, pid: pid, page: page },
+			data: { edit: 1, pid: pid },
 			success: function (data) {
 				if (data == "no") {
 					$("#manageProductPara").html("NO PRODUCT FOUNDS");
 				} else {
-					$("#manageProductPara").html(data);
+					$("#manageProductPara").hide();
+					$("#editProduct").html(data);
 				}
 			},
 		});
@@ -1142,20 +1146,19 @@ $(document).ready(function () {
 					$("#errorInfo-edit").html(
 						'<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>'
 					);
-					$("#wrong_email").toast("show");
+					$("#errorInfo-edit").children().toast("show");
 				}
 			},
 		});
 	});
 
 	$(document).on("click", ".backBtn", function () {
-		var page = $(".withPage").attr("id");
-		load_data(page);
+		$("#manageProductPara").show();
+		$("#editProduct").html("");
 	});
 
 	$(document).on("click", "#deleteBtn", function () {
 		var pid = $("#pid").val();
-		var page = $(".withPage").attr("id");
 		var pimg = $(".product-pic-edit").attr("src");
 		$.ajax({
 			url: "edit-product.php",
@@ -1163,11 +1166,10 @@ $(document).ready(function () {
 			data: { delete: 1, pid: pid, pimg: pimg },
 			success: function (response) {
 				if (response == "deleted") {
-					load_data(page);
 					$("#errorInfo-edit").html(
 						'<div class="toast mt-n1 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#82aef6"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">Successfully Updated Product Information<button type="button" class="btn btn-warning backBtn px-3 mb-2 float-right">Back</button></div></div>'
 					);
-					$("#wrong_email").toast("show");
+					$("#errorInfo-edit").children().toast("show");
 				}
 			},
 		});
@@ -1235,7 +1237,7 @@ $("#resetBtn").click(function () {
 	$(".product-pic").attr("src", "images/product-demo.png");
 });
 
-$("#addProduct").submit(function (e) {
+$("#addProductForm").submit(function (e) {
 	e.preventDefault();
 	if (!$("#shop-id").val()) {
 		$("#errorInfo").html(

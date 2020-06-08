@@ -4,72 +4,9 @@ include 'connection.php';
 session_start();
 $output = "";
 $id = $_SESSION['id'];
-if (isset($_GET['view'])) {
-    $query = oci_parse($conn, "SELECT count(*) NUM FROM SUPPLIER_PRODUCTS WHERE SUPPLIER_ID = '${id}'");
-    oci_execute($query);
-    $totalRows = oci_fetch_assoc($query)['NUM'];
 
-
-    if ($totalRows > 0) {
-        $items = 8;
-        $totalPages = $totalRows / $items + 1;
-
-        isset($_GET['sort']) ? $sort = $_GET['sort'] : $sort = "PRODUCT_NAME";
-
-        isset($_GET['page']) ? $page = $_GET['page'] : $page = 1;
-
-        if ($page > 1) {
-            $start = ($page * $items) - $items + 1;
-            $upper = $start + $items - 1;
-        } else {
-            $start = 1;
-            $upper = $items;
-        }
-
-        $output .= "<h6 class='mt-5 mb-4'>Your Products</h6><nav aria-label='Page navigation example'>
-        <ul class='pagination-bs justify-content-end' id='$page'>" .
-            (($page != 1) ? "<li class='page-item-bs'><a class='page-link-bs prev' id='$page'>Previous</a></li>" : "");
-
-        for ($i = 1; $i <= $totalPages; $i++) {
-            $output .= "<li class='page-item-bs'><a class='page-link-bs' id='$i'>$i</a></li>";
-        }
-
-        $output .=  (($page != (int) $totalPages) ? "<li class='page-item-bs'><a class='page-link-bs next' id='$page'>Next</a></li>" : "") .
-            "</ul>
-    </nav>
-    <div class='table-responsive'>
-        <table class='table table-hover'>
-            <thead class='thead-dark'>
-                <tr>
-                    <th scope='col' style='width: 21%'>Product Image</th>
-                    <th scope='col'>Product Name</th>
-                    <th scope='col'><a  id='sort-price' style='cursor:pointer'>Price</a></th>
-                    <th scope='col'>Stock Remaining</th>
-                    <th scope='col'>Shop</th>
-                </tr>
-            </thead>
-            <tbody>";
-
-        $query = oci_parse($conn, "SELECT * FROM (SELECT t.*, Row_Number() OVER (ORDER BY PRODUCT_NAME) MyRow FROM SUPPLIER_PRODUCTS t WHERE SUPPLIER_ID = '${id}') WHERE MyRow BETWEEN '${start}' AND '${upper}' ORDER BY {$sort} ");
-        oci_execute($query);
-        while ($result = oci_fetch_assoc($query)) {
-            $output .= "<tr class='edit-product' style='cursor:pointer' id='" . $result['PRODUCT_ID'] . "'>
-                        <td style='padding-top:5px;padding-bottom:5px'><img class='img-fluid' src='" . $result['PRODUCT_IMAGE'] . "'></td>
-                        <td>" . $result['PRODUCT_NAME'] . "</td>
-                        <td>$" . $result['PRICE'] . "</td>
-                        <td>" . $result['STOCK_AMOUNT'] . "</td>
-                        <td>" . $result['SHOP_NAME'] . "</td>
-                    </tr>";
-        }
-        $output .= "</tbody>
-        </table>
-    </div>";
-    } else {
-        $output = 'no';
-    }
-} else if (isset($_GET['edit']) && isset($_GET['pid'])) {
+if (isset($_GET['edit']) && isset($_GET['pid'])) {
     $pid = $_GET['pid'];
-    $page = $_GET['page'];
     $query = oci_parse($conn, "SELECT * FROM PRODUCT NATURAL JOIN SHOP_PRODUCT WHERE PRODUCT_ID = '${pid}'");
     oci_execute($query);
     $result = oci_fetch_assoc($query);
@@ -143,7 +80,7 @@ if (isset($_GET['view'])) {
     </div>
     <br>
     <div class='form-row'>
-    <button type='button' id='$page' class='btn btn-info withPage backBtn col-md-2'>Cancel</button>
+    <button type='button' class='btn btn-info withPage backBtn col-md-2'>Cancel</button>
         <button type='reset' id='resetBtn' class='btn btn-dark col-md-3 offset-md-3'>Reset Fields</button>
         <button type='submit' id='editProduct' class='btn btn-primary col-md-3 offset-md-1'>Update Product</button>
     </div>";

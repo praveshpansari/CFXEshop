@@ -5,6 +5,8 @@ session_start();
 if (isset($_SESSION['loggedin'])) {
 	if ($_SESSION['type'] == 'trader')
 		header('location:trader.php');
+	else if ($_SESSION['type'] == 'admin')
+		header('location:admin.php');
 	else if (isset($_GET['add']) && isset($_GET['pid']) && isset($_GET['min'])) {
 		$cart = $_SESSION['cartId'];
 		$pid = $_GET['pid'];
