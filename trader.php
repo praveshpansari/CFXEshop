@@ -32,7 +32,7 @@ if (isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="lib/DataTables/datatables.min.css" />
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
@@ -108,7 +108,11 @@ if (isset($_SESSION['loggedin'])) {
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active"><a href="trader.php" class="nav-link"><strong><?= $_SESSION['user'] ?></strong></a></li>
                     <li class="nav-item btn-nav"><a href="logout.php" class="nav-link">LOGOUT</a></li>
-
+                    <?php
+                    if (isset($_SESSION['byAdmin'])) {
+                    ?>
+                        <li class="nav-item ml-3 btn-nav"><a href="admin.php" id=".<?= $_SESSION['byAdmin'] ?>." class="nav-link back-admin" style="background:#343a40;border-color:#343a40">Back to Admin</a></li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
@@ -148,6 +152,9 @@ if (isset($_SESSION['loggedin'])) {
                                 </button>
                                 <button class="btn-accord btn-block" id="manageProductBtn" type="button" data-toggle="collapse" data-target="#manageProduct" aria-controls="manageProduct">
                                     Manage Products
+                                </button>
+                                <button class="btn-accord btn-block" id="manageOrdersBtn" type="button" data-toggle="collapse" data-target="#manageOrders" aria-controls="manageOrders">
+                                    Manage Orders
                                 </button>
                             </div>
                         </div>
@@ -426,7 +433,7 @@ if (isset($_SESSION['loggedin'])) {
                                                 oci_execute($query);
                                                 while ($result = oci_fetch_assoc($query)) {
                                                     echo "<tr class='edit-product' style='cursor:pointer' id='" . $result['PRODUCT_ID'] . "'>
-                                                            <td style='padding-top:5px;padding-bottom:5px'><img class='img-fluid' src='" . $result['PRODUCT_IMAGE'] . "'></td>
+                                                            <td style='width: 20% !important;padding-top:5px;padding-bottom:5px'><img class='img-fluid' src='" . $result['PRODUCT_IMAGE'] . "'></td>
                                                             <td>" . $result['PRODUCT_NAME'] . "</td>
                                                             <td>$" . $result['PRICE'] . "</td>
                                                             <td>" . $result['STOCK_AMOUNT'] . "</td>
@@ -439,6 +446,59 @@ if (isset($_SESSION['loggedin'])) {
                                 </div>
 
                                 <div id="editProduct"></div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 collapse" id="manageOrders" data-parent="#accordian">
+                    <div class="card pb-5">
+                        <div class="card-body">
+                            <h5 class="card-title mb-n1">Orders Completed</h5>
+                            <p class="card-text">
+                                <h6 class="mt-5 mb-4">Order Information</h6>
+                                <div class="table-responsive">
+                                    <?php
+                                    $userId = $_SESSION['id'];
+                                    $query = oci_parse($conn, "SELECT count(*) NUM FROM TRADER_ORDERS WHERE SUPPLIER_ID = '${userId}'");
+                                    $result = [1][0];
+                                    oci_execute($query);
+                                    if (oci_fetch_assoc($query)['NUM'] != 0) {
+                                        $query = oci_parse($conn, "SELECT * FROM TRADER_ORDERS WHERE SUPPLIER_ID = '${userId}'");
+                                        oci_execute($query); ?>
+                                        <table id="orderTable" cellspacing="0" class="table table-hover" style="width: 100% !important">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">Invoice No.</th>
+                                                    <th scope="col">Shop Name</th>
+                                                    <th scope="col">Product Name</th>
+                                                    <th scope="col">Unit Price</th>
+                                                    <th scope="col">Quantity</th>
+                                                    <th scope="col">Sell Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                while ($result = oci_fetch_assoc($query)) {
+                                                ?>
+                                                    <tr>
+                                                        <th scope="row"><?= $result['INVOICE_NO'] ?></th>
+                                                        <td><?= $result['SHOP_NAME'] ?></td>
+                                                        <td><?= $result['PRODUCT_NAME'] ?></td>
+                                                        <td>$<?= number_format($result['PRICE'], 2) ?></td>
+                                                        <td><?= $result['QUANTITY'] ?></td>
+                                                        <td>$<?= number_format($result['SELL_PRICE'], 2) ?></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                </div>
+                            <?php } else {
+                                        echo "No records found";
+                                    }
+                            ?>
                             </p>
                         </div>
                     </div>
@@ -542,11 +602,41 @@ if (isset($_SESSION['loggedin'])) {
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/aos.js"></script>
     <script src="js/jquery.animateNumber.min.js"></script>
-    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="lib/DataTables/datatables.min.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
     <script src="js/scrollax.min.js"></script>
     <script src="js/google-map.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#shopTable').DataTable();
+            $('#productTable').DataTable();
+            $('#orderTable').DataTable();
+        });
+
+        $('#shopTable').DataTable({
+            responsive: true
+        });
+        $('#productTable').DataTable({
+            responsive: true
+        });
+
+        $('.back-admin').click(function() {
+            var id = $(this).attr('id');
+            $.ajax({
+                url: 'action.php',
+                method: 'GET',
+                data: {
+                    back: 1,
+                    id: id
+                },
+                success: function(response) {
+                    if (response == 'done')
+                        window.location = 'admin.php';
+                }
+            })
+        })
+    </script>
 
 </body>
 

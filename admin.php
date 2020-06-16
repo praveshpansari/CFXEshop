@@ -32,7 +32,7 @@ if (isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="lib/DataTables/datatables.min.css" />
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
@@ -87,11 +87,14 @@ if (isset($_SESSION['loggedin'])) {
                         <div class="row no-gutters">
 
                             <div class="card-body">
-                                <button class="btn-accord btn-block " id="manageTradersBtn" type="button" data-toggle="collapse" data-target="#manageTraders" aria-controls="manageTraders">
-                                    Manage Traders
+                                <button class="btn-accord btn-block" id="manageTradersBtn" type="button" data-toggle="collapse" data-target="#manageTraders" aria-controls="manageTraders">
+                                    Access Traders
                                 </button>
                                 <button class="btn-accord btn-block" id="approveTradersBtn" type="button" data-toggle="collapse" data-target="#approveTraders" aria-controls="approveTraders">
                                     Approve Traders
+                                </button>
+                                <button class="btn-accord btn-block" id="manageUsersBtn" type="button" data-toggle="collapse" data-target="#manageUsers" aria-controls="manageUsers">
+                                    Manage Users
                                 </button>
                             </div>
                         </div>
@@ -108,9 +111,9 @@ if (isset($_SESSION['loggedin'])) {
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th scope='col' style="width: 20% !important;">Trader Name</th>
-                                                <th scope='col' style="width: 20% !important;">Category</th>
-                                                <th scope='col' style="width: 15% !important;">Shops</th>
-                                                <th scope='col' style="width: 15% !important;">Access</th>
+                                                <th scope='col' style="width: 16% !important;">Category</th>
+                                                <th scope='col' style="width: 25% !important;">Shops</th>
+                                                <th scope='col' style="width: 12% !important;">Access</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -140,40 +143,89 @@ if (isset($_SESSION['loggedin'])) {
                             <h5 class="card-title">Approve Traders</h5>
                             <p class="card-text">
                                 <h6 class="mt-5 mb-4">Trader Requests</h6>
-                                
-                                    <?php
-                                    $query = oci_parse($conn,"SELECT count(*) num FROM TRADER WHERE APPROVED = 'N'");
-                                    oci_execute($query);
-                                    $result = oci_fetch_assoc($query);
-                                    if($result['NUM'] > 0) {
-                                    
-                                    ?><div class="table-responsive">
-                                    <table id="traderTable" class="table table-hover">
-                                        <thead class='thead-dark'>
-                                            <tr>
-                                                <th scope='col' style="width: 20% !important;">Trader Name</th>
-                                                <th scope='col' style="width: 20% !important;">Category</th>
-                                                <th scope='col' style="width: 15% !important;">Website</th>
-                                                <th scope='col' style="width: 15% !important;">Approval</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $query = oci_parse($conn, "SELECT TRADER_ID,TRADER_NAME,CATEGORY_NAME,WEBSITE FROM TRADER, USERS,CATEGORY WHERE TRADER.TRADER_ID = USERS.USER_ID AND TRADER.CATEGORY_NO = CATEGORY.CATEGORY_NO AND APPROVED = 'N'");
-                                            oci_execute($query);
-                                            while ($result = oci_fetch_assoc($query)) {
-                                                echo "<tr>
+
+                                <?php
+                                $query = oci_parse($conn, "SELECT count(*) num FROM TRADER WHERE APPROVED = 'N'");
+                                oci_execute($query);
+                                $result = oci_fetch_assoc($query);
+                                if ($result['NUM'] > 0) {
+
+                                ?><div class="table-responsive">
+                                        <table id="traderTable" class="table table-hover">
+                                            <thead class='thead-dark'>
+                                                <tr>
+                                                    <th scope='col' style="width: 20% !important;">Trader Name</th>
+                                                    <th scope='col' style="width: 20% !important;">Category</th>
+                                                    <th scope='col' style="width: 15% !important;">Website</th>
+                                                    <th scope='col' style="width: 15% !important;">Approval</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $query = oci_parse($conn, "SELECT TRADER_ID,TRADER_NAME,CATEGORY_NAME,WEBSITE FROM TRADER, USERS,CATEGORY WHERE TRADER.TRADER_ID = USERS.USER_ID AND TRADER.CATEGORY_NO = CATEGORY.CATEGORY_NO AND APPROVED = 'N'");
+                                                oci_execute($query);
+                                                while ($result = oci_fetch_assoc($query)) {
+                                                    echo "<tr>
                                                         <td>" . $result['TRADER_NAME'] . "</td>
                                                         <td>" . $result['CATEGORY_NAME'] . "</td>
                                                         <td>" . $result['WEBSITE'] . "</td>
                                                         <td><a class='btn btn-dark approve' id='" . $result['TRADER_ID'] . "' style='font-weight:bold;font-size:small;color:white;border-radius:0'>APPROVE</td>
                                                 </tr>";
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                <?php } else {
+                                    echo "NO NEW TRADER REQUESTS";
+                                } ?>
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 collapse" id="manageUsers" data-parent="#accordian">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Users</h5>
+                            <p class="card-text">
+                                <h6 class="mt-5 mb-4">User Information</h6>
+                                <div id="errorInfo"></div>
+                                <div class="table-responsive">
+                                    <table id="userTable" class="table table-hover">
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <th scope='col' style="width: 20% !important;">Name</th>
+                                                <th scope='col' style="width: 20% !important;">Account Type</th>
+                                                <th scope='col' style="width: 15% !important;">Email</th>
+                                                <th scope='col' style="width: 15% !important;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $query = oci_parse($conn, "SELECT USER_ID,EMAIL,TYPE FROM USERS WHERE TYPE != 'A'");
+                                            oci_execute($query);
+                                            while ($result = oci_fetch_assoc($query)) {
+                                                echo "<tr>";
+                                                $nid = $result['USER_ID'];
+                                                if ($result['TYPE'] == 'T') {
+                                                    $q = oci_parse($conn, "SELECT TRADER_NAME username FROM TRADER WHERE TRADER_ID = '${nid}'");
+                                                } else if ($result['TYPE'] == 'C') {
+                                                    $q = oci_parse($conn, "SELECT FIRST_NAME || ' ' || LAST_NAME username FROM CUSTOMER WHERE CUSTOMER_ID = " . $result['USER_ID']);
+                                                }
+                                                oci_execute($q);
+                                                $c = oci_fetch_assoc($q)['USERNAME'];
+                                                echo "<td>" . $c . "</td>
+                                                        <td>" . (($result['TYPE'] == 'T') ? "TRADER" : "CUSTOMER") . "</td>
+                                                        <td>" . $result['EMAIL'] . "</td>
+                                                        <td><a class='btn btn-dark delete-user' id='" . $nid  . "' style='font-weight:bold;font-size:small;color:white;border-radius:0'>DELETE</td>
+                                                </tr>";
                                             }
+
                                             ?>
                                         </tbody>
-                                    </table></div>
-                                        <?php } else {echo "NO NEW TRADER REQUESTS";}?>
-                                
+                                    </table>
+                                </div>
                             </p>
                         </div>
                     </div>
@@ -277,11 +329,61 @@ if (isset($_SESSION['loggedin'])) {
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/aos.js"></script>
     <script src="js/jquery.animateNumber.min.js"></script>
-    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="lib/DataTables/datatables.min.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
     <script src="js/scrollax.min.js"></script>
     <script src="js/google-map.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#traderTable').DataTable();
+            $('#userTable').DataTable();
+        });
+
+        $('.access').click(function() {
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: "action.php",
+                method: "GET",
+                data: {
+                    access: 1,
+                    id: id
+                },
+                success: function(response) {
+                    if (response == 'success')
+                        window.location = 'trader.php';
+                }
+            });
+        });
+
+        $('.delete-user').click(function() {
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: "action.php",
+                method: "GET",
+                data: {
+                    delete: 1,
+                    id: id
+                },
+                success: function(response) {
+                    localStorage.setItem('doneDelete', 'yes');
+                    location.reload();
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            if (localStorage.getItem('doneDelete') == 'yes') {
+                $("#errorInfo").html(
+                    '<div class="toast mt-n4 mb-4" data-autohide="false" id="wrong_email"><div class="toast-header"><strong style="color:#f76666"> Success!</strong><button type="button" class="close" data-dismiss="toast">&times;</button></div><div class="toast-body" style="text-align:left" id="aerror">User successfully deleted!</div></div>'
+                );
+                $("#wrong_email").toast("show");
+                localStorage.setItem('doneDelete', 'no');
+            }
+        });
+    </script>
 
 </body>
 

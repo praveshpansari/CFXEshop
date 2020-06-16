@@ -758,6 +758,9 @@ $(document).ready(function () {
 	if (!localStorage.getItem("collapseItem"))
 		localStorage.setItem("collapseItem", "#" + $("#profileUpdate").attr("id"));
 
+	if (!localStorage.getItem("adminItem"))
+		localStorage.setItem("adminItem", "#" + $("#manageTraders").attr("id"));
+
 	$("#profileUpdate").on("shown.bs.collapse", function () {
 		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
 		var collapseItem = localStorage.getItem("collapseItem");
@@ -772,18 +775,32 @@ $(document).ready(function () {
 		$(collapseItem + "Btn").addClass("active");
 	});
 
-	$("#approveTraders").on("shown.bs.collapse", function () {
+	$("#manageOrders").on("shown.bs.collapse", function () {
 		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
 		var collapseItem = localStorage.getItem("collapseItem");
 		$(".btn-accord").removeClass("active");
 		$(collapseItem + "Btn").addClass("active");
 	});
 
-	$("#manageTraders").on("shown.bs.collapse", function () {
-		localStorage.setItem("collapseItem", "#" + $(this).attr("id"));
-		var collapseItem = localStorage.getItem("collapseItem");
+	$("#approveTraders").on("shown.bs.collapse", function () {
+		localStorage.setItem("adminItem", "#" + $(this).attr("id"));
+		var adminItem = localStorage.getItem("adminItem");
 		$(".btn-accord").removeClass("active");
-		$(collapseItem + "Btn").addClass("active");
+		$(adminItem + "Btn").addClass("active");
+	});
+
+	$("#manageUsers").on("shown.bs.collapse", function () {
+		localStorage.setItem("adminItem", "#" + $(this).attr("id"));
+		var adminItem = localStorage.getItem("adminItem");
+		$(".btn-accord").removeClass("active");
+		$(adminItem + "Btn").addClass("active");
+	});
+
+	$("#manageTraders").on("shown.bs.collapse", function () {
+		localStorage.setItem("adminItem", "#" + $(this).attr("id"));
+		var adminItem = localStorage.getItem("adminItem");
+		$(".btn-accord").removeClass("active");
+		$(adminItem + "Btn").addClass("active");
 	});
 
 	$("#orderManage").on("shown.bs.collapse", function () {
@@ -809,6 +826,10 @@ $(document).ready(function () {
 
 	var collapseItem = localStorage.getItem("collapseItem");
 	$(collapseItem).collapse("show");
+
+	var adminItem = localStorage.getItem("adminItem");
+	$(adminItem).collapse("show");
+
 });
 
 $(document).ready(function () {
@@ -1029,22 +1050,13 @@ $(document).ready(function () {
 
 });
 
-$(document).ready(function () {
-	$('#shopTable').DataTable();
-	$('#traderTable').DataTable();
-});
-
-$('#shopTable').DataTable({
-	responsive: true
-});
-
-$('.approve').click(function() {
+$('.approve').click(function () {
 	var tid = $(this).attr('id');
 	$.ajax({
-		url:'action.php',
-		method:'post',
-		data: {approve:1,tid:tid},
-		success:function(data) {
+		url: 'action.php',
+		method: 'post',
+		data: { approve: 1, tid: tid },
+		success: function (data) {
 			$("#approveTraders").load(window.location.href + " #approveTraders");
 		}
 	})
@@ -1082,13 +1094,6 @@ $('.quantity').on("input", function () {
 
 
 $(document).ready(function () {
-
-	var table = $('#productTable').DataTable({
-		responsive: true
-	});
-
-
-
 
 	function edit_product(pid) {
 		$.ajax({
@@ -1298,3 +1303,4 @@ $("#addProductForm").submit(function (e) {
 		});
 	}
 });
+

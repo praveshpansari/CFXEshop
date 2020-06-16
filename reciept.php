@@ -1,5 +1,5 @@
 <?php
-require_once 'dompdf/autoload.inc.php';
+require_once 'lib/dompdf/autoload.inc.php';
 include 'connection.php';
 session_start();
 
@@ -211,8 +211,8 @@ if (isset($_SESSION['loggedin'])) {
     }
 
     #thanks {
-      font-size: 2em;
-      margin-bottom: 50px;
+      font-size: 1.75em;
+      margin-bottom: 20px;
     }
 
     #notices {
@@ -221,7 +221,7 @@ if (isset($_SESSION['loggedin'])) {
     }
 
     #notices .notice {
-      font-size: 1.2em;
+      font-size: 1.1em;
     }
 
     footer {
@@ -240,7 +240,7 @@ if (isset($_SESSION['loggedin'])) {
 
   <header><div class="row no-gutters" style="padding-bottom:-4.5em;">
     <div  id="logo">
-      <img src="logo.png">
+      <img src="images/logo.jpg">
     </div>
     <div class="col-md-4" id="company">
       <h2 class="name">CFX eShop</h2>
@@ -327,7 +327,7 @@ if (isset($_SESSION['loggedin'])) {
     <div id="thanks">Thank you!</div>
     <div id="notices">
       <div>NOTICE:</div>
-      <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+      <div class="notice">If not collected on collection day order will be canceled.</div>
     </div>
   </main>
   <footer>

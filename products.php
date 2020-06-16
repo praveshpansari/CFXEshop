@@ -79,7 +79,7 @@ while ($result = oci_fetch_assoc($query)) {
     $discountQuery = oci_parse($conn, "SELECT OFFER FROM SHOP_PRODUCT WHERE PRODUCT_ID = '${prodId}'");
     oci_execute($discountQuery);
     $discount = oci_fetch_assoc($discountQuery)['OFFER'];
-    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']=='customer') {
         $cart = $_SESSION['cartId'];
         $inCartQuery = oci_parse($conn, "BEGIN :count := check_cart('${cart}', '${prodId}'); END;");
         oci_bind_by_name($inCartQuery, ":count", $count);
