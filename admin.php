@@ -151,7 +151,7 @@ if (isset($_SESSION['loggedin'])) {
                                 if ($result['NUM'] > 0) {
 
                                 ?><div class="table-responsive">
-                                        <table id="traderTable" class="table table-hover">
+                                        <table id="approveTable" class="table table-hover">
                                             <thead class='thead-dark'>
                                                 <tr>
                                                     <th scope='col' style="width: 20% !important;">Trader Name</th>

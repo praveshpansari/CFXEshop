@@ -614,13 +614,6 @@ if (isset($_SESSION['loggedin'])) {
             $('#orderTable').DataTable();
         });
 
-        $('#shopTable').DataTable({
-            responsive: true
-        });
-        $('#productTable').DataTable({
-            responsive: true
-        });
-
         $('.back-admin').click(function() {
             var id = $(this).attr('id');
             $.ajax({

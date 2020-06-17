@@ -51,8 +51,11 @@ if (isset($_POST['first_name']) && isset($_POST['username']) && isset($_POST['ag
                                 $headers = "From: cfxeshop@gmail.com" . "\r\n";
                                 $headers .= "MIME-Version:1.0" . "\r\n";
                                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-                                echo "success";
-                                mail($to, $subject, $message, $headers);
+                                $success = mail($to, $subject, $message, $headers);
+                                if(!$success) {
+                                    print_r(error_get_last()['message']);
+                                } else 
+                                echo 'success';
                             }
                         }
                     } else {

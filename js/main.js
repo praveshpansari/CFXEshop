@@ -1057,7 +1057,7 @@ $('.approve').click(function () {
 		method: 'post',
 		data: { approve: 1, tid: tid },
 		success: function (data) {
-			$("#approveTraders").load(window.location.href + " #approveTraders");
+			$("#approveTable").load(window.location.href + " #approveTable");
 		}
 	})
 });
