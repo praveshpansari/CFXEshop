@@ -30,6 +30,7 @@ This is an ecommerce website with three types of users: Buyers, Traders and Admi
 
 ![image](https://user-images.githubusercontent.com/25385289/198536831-8bca4cc2-4c8d-4bcc-ac11-a03eb6f131d1.png)
 ![198542526-d6e63c37-7298-42c2-972d-78b4b1b54981](https://user-images.githubusercontent.com/25385289/198542703-8b0cd094-6499-41e3-abd9-b922cb8ae280.png)
+![198543771-0dae33a5-2711-4aff-9eb3-4f0f20b6a31d](https://user-images.githubusercontent.com/25385289/198543946-714fd2d8-06b1-4946-89cb-d6bf4da56fe1.png)
 
 ## Logical Design
 
